@@ -1,0 +1,48 @@
+import { Router } from 'express'
+import sessionGuard from '../middleware/sessionGuard'
+import roleGuard from '../middleware/roleGuard'
+import {
+  getStats,
+  getPendingOwners,
+  approveOwner,
+  getPendingProperties,
+  approveProperty,
+  rejectProperty,
+  getAllProperties,
+  adminDeleteProperty,
+  getAllUsers,
+  toggleUserActive,
+  getSettings,
+  updateGlobalImageLimit,
+  updateUserImageLimit,
+} from '../controllers/admin.controller'
+
+const router = Router()
+
+// All admin routes require session + admin role
+router.use(sessionGuard, roleGuard('admin'))
+
+// Dashboard
+router.get('/stats', getStats)
+
+// Owner management
+router.get('/owners/pending', getPendingOwners)
+router.put('/owners/:id/approve', approveOwner)
+
+// Property management
+router.get('/properties/pending', getPendingProperties)
+router.put('/properties/:id/approve', approveProperty)
+router.put('/properties/:id/reject', rejectProperty)
+router.get('/properties', getAllProperties)
+router.delete('/properties/:id', adminDeleteProperty)
+
+// User management
+router.get('/users', getAllUsers)
+router.patch('/users/:id/deactivate', toggleUserActive)
+
+// Settings
+router.get('/settings', getSettings)
+router.put('/settings/image-limit', updateGlobalImageLimit)
+router.put('/users/:id/image-limit', updateUserImageLimit)
+
+export default router
