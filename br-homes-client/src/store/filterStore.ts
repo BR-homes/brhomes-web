@@ -2,7 +2,7 @@ import { create } from 'zustand'
 
 interface FilterState {
   city: string
-  propertyType: '' | 'house' | 'flat' | 'shop' | 'land'
+  propertyType: '' | 'house' | 'flat'
   listingType: '' | 'sale' | 'rent'
   bhk: '' | '1' | '2' | '3' | '4' | '5'
   minPrice: string

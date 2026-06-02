@@ -62,8 +62,6 @@ export function getPropertyTypeLabel(type: string): string {
   const labels: Record<string, string> = {
     house: 'House',
     flat: 'Flat',
-    shop: 'Shop',
-    land: 'Land',
   }
   return labels[type] || type
 }

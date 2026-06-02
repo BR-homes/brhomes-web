@@ -23,8 +23,8 @@ export default function SavePropertyButton({ propertyId, className = '', variant
     e.preventDefault() // prevent navigating if it's inside a Link
     e.stopPropagation()
 
-    if (!isAuthenticated || user?.role !== 'buyer') {
-      toast.error('Only buyers can save properties. Please login as a buyer.')
+    if (!isAuthenticated) {
+      toast.error('Please login to save properties')
       return
     }
 

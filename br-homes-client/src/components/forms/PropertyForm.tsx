@@ -11,7 +11,7 @@ import type { IProperty } from '@/types'
 const propertySchema = z.object({
   title: z.string().min(5, 'Title must be at least 5 characters').max(150),
   description: z.string().min(20, 'Description must be at least 20 characters').max(2000),
-  propertyType: z.enum(['house', 'flat', 'shop', 'land']),
+  propertyType: z.enum(['house', 'flat']),
   listingType: z.enum(['sale', 'rent']),
   bhk: z.string().optional(),
   areaSqft: z.string().optional(),
@@ -94,8 +94,6 @@ export default function PropertyForm({ initialData, onSubmit, isSubmitting }: Pr
             <select {...register('propertyType')} className="mt-1 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring">
               <option value="house">House</option>
               <option value="flat">Flat</option>
-              <option value="shop">Shop</option>
-              <option value="land">Land</option>
             </select>
           </div>
           <div>

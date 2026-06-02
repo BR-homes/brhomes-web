@@ -140,9 +140,8 @@ export const createProperty = asyncHandler(
       }
     }
 
-    // Nullify bhk for shop/land
     const data = parsed.data
-    const bhk = ['shop', 'land'].includes(data.propertyType) ? null : data.bhk
+    const bhk = data.bhk
 
     const property = await Property.create({
       ...data,

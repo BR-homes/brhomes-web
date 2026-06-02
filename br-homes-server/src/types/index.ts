@@ -1,4 +1,4 @@
-export type PropertyType = 'house' | 'flat' | 'shop' | 'land'
+export type PropertyType = 'house' | 'flat'
 export type ListingType = 'sale' | 'rent'
 export type PropertyStatus = 'pending' | 'approved' | 'rejected' | 'hidden' | 'sold' | 'rented'
 export type UserRole = 'buyer' | 'owner' | 'admin'

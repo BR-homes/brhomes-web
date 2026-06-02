@@ -33,6 +33,8 @@ import PendingPropertiesPage from '@/pages/admin/PendingPropertiesPage'
 import ManagePropertiesPage from '@/pages/admin/ManagePropertiesPage'
 import ManageUsersPage from '@/pages/admin/ManageUsersPage'
 import SettingsPage from '@/pages/admin/SettingsPage'
+import AdminSliderPage from '@/pages/admin/AdminSliderPage'
+import ContactPage from '@/pages/public/ContactPage'
 
 export const router = createBrowserRouter([
   // Auth pages (no navbar/footer)
@@ -53,6 +55,7 @@ export const router = createBrowserRouter([
     children: [
       // Public
       { path: '/', element: <HomePage /> },
+      { path: '/contact', element: <ContactPage /> },
       { path: '/properties', element: <ListingsPage /> },
       { path: '/properties/:id', element: <PropertyDetailPage /> },
 
@@ -72,6 +75,7 @@ export const router = createBrowserRouter([
             element: <DashboardLayout />,
             children: [
               { path: '/owner/dashboard', element: <OwnerDashboardPage /> },
+              { path: '/owner/saved', element: <SavedPage /> },
               { path: '/owner/properties', element: <OwnerPropertiesPage /> },
               { path: '/owner/add-property', element: <AddPropertyPage /> },
               { path: '/owner/edit-property/:id', element: <EditPropertyPage /> },
@@ -93,6 +97,7 @@ export const router = createBrowserRouter([
               { path: '/admin/properties', element: <ManagePropertiesPage /> },
               { path: '/admin/users', element: <ManageUsersPage /> },
               { path: '/admin/settings', element: <SettingsPage /> },
+              { path: '/admin/slider', element: <AdminSliderPage /> },
             ],
           },
         ],

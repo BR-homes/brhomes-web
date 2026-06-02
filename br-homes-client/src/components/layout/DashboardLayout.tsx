@@ -2,7 +2,7 @@ import { NavLink, Outlet } from 'react-router-dom'
 import { useAuthStore } from '@/store/authStore'
 import {
   LayoutDashboard, Building2, Plus, Users, ClipboardCheck,
-  Settings, Shield, UserCheck, BarChart3
+  Settings, Shield, UserCheck, BarChart3, ImagePlus
 } from 'lucide-react'
 
 export default function DashboardLayout() {
@@ -19,6 +19,7 @@ export default function DashboardLayout() {
     { to: '/admin/pending-owners', label: 'Pending Owners', icon: UserCheck },
     { to: '/admin/pending-properties', label: 'Pending Properties', icon: ClipboardCheck },
     { to: '/admin/properties', label: 'All Properties', icon: Building2 },
+    { to: '/admin/slider', label: 'Slider Images', icon: ImagePlus },
     { to: '/admin/users', label: 'Manage Users', icon: Users },
     { to: '/admin/settings', label: 'Settings', icon: Settings },
   ]
@@ -26,7 +27,7 @@ export default function DashboardLayout() {
   const links = user?.role === 'admin' ? adminLinks : ownerLinks
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-[calc(100vh-4rem-1px)]">
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Sidebar */}
         <aside className="lg:w-60 flex-shrink-0">

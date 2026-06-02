@@ -11,7 +11,7 @@ export interface IProperty extends Document {
   ownerId: Types.ObjectId
   title: string
   description: string
-  propertyType: 'house' | 'flat' | 'shop' | 'land'
+  propertyType: 'house' | 'flat'
   listingType: 'sale' | 'rent'
   bhk: number | null
   areaSqft: number | null
@@ -65,7 +65,7 @@ const propertySchema = new Schema<IProperty>(
     },
     propertyType: {
       type: String,
-      enum: ['house', 'flat', 'shop', 'land'],
+      enum: ['house', 'flat'],
       required: [true, 'Property type is required'],
     },
     listingType: {

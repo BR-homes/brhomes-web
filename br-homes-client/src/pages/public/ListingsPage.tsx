@@ -16,7 +16,7 @@ export default function ListingsPage() {
   // Apply URL params on mount
   useEffect(() => {
     const pt = searchParams.get('propertyType')
-    if (pt && ['house', 'flat', 'shop', 'land'].includes(pt)) {
+    if (pt && ['house', 'flat'].includes(pt)) {
       filters.setFilter('propertyType', pt as any)
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
@@ -70,8 +70,7 @@ export default function ListingsPage() {
               <option value="">All Types</option>
               <option value="house">House</option>
               <option value="flat">Flat</option>
-              <option value="shop">Shop</option>
-              <option value="land">Land</option>
+              {/* only house/flat supported */}
             </select>
 
             {/* Listing Type */}

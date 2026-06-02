@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge'
 import { formatPrice, getPropertyTypeLabel } from '@/lib/utils'
 import type { IProperty, PropertyStatus } from '@/types'
 import SavePropertyButton from '@/components/common/SavePropertyButton'
+import ImageCarousel from '@/components/common/ImageCarousel'
 
 interface PropertyCardProps {
   property: IProperty
@@ -20,21 +21,24 @@ const statusVariant: Record<PropertyStatus, 'success' | 'warning' | 'error' | 's
 }
 
 export default function PropertyCard({ property, showStatus = false }: PropertyCardProps) {
-  const primaryImage = property.images.find((img) => img.isPrimary) || property.images[0]
-  const imageUrl = primaryImage?.imageUrl || '/placeholder-property.jpg'
+  const images = property.images.length > 0
+    ? property.images
+    : [{ imageUrl: '/placeholder-property.jpg', cloudinaryPublicId: '', isPrimary: true }]
 
   return (
     <Link to={`/properties/${property._id}`} className="group block">
       <article className="bg-white rounded-xl border border-slate-200/80 overflow-hidden hover-lift">
-        {/* Image */}
+        {/* Image Carousel */}
         <div className="relative aspect-video overflow-hidden bg-slate-100">
-          <img
-            src={imageUrl}
+          <ImageCarousel
+            images={images}
             alt={property.title}
-            loading="lazy"
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            className="h-full w-full"
+            autoSlideInterval={3000}
           />
-          <div className="absolute top-3 left-3 flex gap-1.5">
+
+          {/* Badges overlay */}
+          <div className="absolute top-3 left-3 flex gap-1.5 z-20">
             <Badge variant="default" className="bg-white/90 text-slate-900 backdrop-blur-sm text-xs shadow-sm">
               {getPropertyTypeLabel(property.propertyType)}
             </Badge>
@@ -50,7 +54,7 @@ export default function PropertyCard({ property, showStatus = false }: PropertyC
             </Badge>
           </div>
           
-          <div className="absolute top-3 right-3 flex flex-col gap-2 items-end">
+          <div className="absolute top-3 right-3 flex flex-col gap-2 items-end z-20">
             {showStatus && (
               <Badge variant={statusVariant[property.status]} className="capitalize text-xs">
                 {property.status}

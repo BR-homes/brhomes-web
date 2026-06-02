@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import LoadingSkeleton from '@/components/common/LoadingSkeleton'
+import ImageCarousel from '@/components/common/ImageCarousel'
 import { queryKeys } from '@/lib/queryClient'
 import { formatPrice, formatDate, getPropertyTypeLabel } from '@/lib/utils'
 import api from '@/lib/axios'
@@ -63,21 +64,23 @@ export default function PendingPropertiesPage() {
         <div className="space-y-4">
           {properties.map((prop) => {
             const owner = typeof prop.ownerId === 'object' ? prop.ownerId : null
-            const primaryImage = prop.images.find((i) => i.isPrimary) || prop.images[0]
+            const images = prop.images.length > 0
+              ? prop.images
+              : [{ imageUrl: '/placeholder-property.jpg', cloudinaryPublicId: '', isPrimary: true }]
 
             return (
               <div key={prop._id} className="bg-white rounded-xl border border-slate-200 overflow-hidden">
                 <div className="flex flex-col sm:flex-row">
-                  {/* Image */}
-                  <div className="sm:w-48 flex-shrink-0">
+                  {/* Image Carousel */}
+                  <div className="sm:w-56 flex-shrink-0">
                     <Link to={`/properties/${prop._id}`}>
-                      <div className="aspect-video sm:aspect-square h-full">
-                        {primaryImage ? (
-                          <img src={primaryImage.imageUrl} alt={prop.title} className="w-full h-full object-cover" />
-                        ) : (
-                          <div className="w-full h-full bg-slate-100 flex items-center justify-center text-slate-400 text-xs">No image</div>
-                        )}
-                      </div>
+                      <ImageCarousel
+                        images={images}
+                        alt={prop.title}
+                        className="h-48 sm:h-full w-full bg-slate-100"
+                        imageClassName="rounded-t-xl sm:rounded-t-none sm:rounded-l-xl"
+                        autoSlideInterval={4000}
+                      />
                     </Link>
                   </div>
 

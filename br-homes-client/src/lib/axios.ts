@@ -4,7 +4,6 @@ import { useAuthStore } from '@/store/authStore'
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   withCredentials: true,
-  headers: { 'Content-Type': 'application/json' },
 })
 
 // Request interceptor to inject Authorization header

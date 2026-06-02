@@ -6,7 +6,7 @@ import LoadingSkeleton from '@/components/common/LoadingSkeleton'
 import { useProperty } from '@/hooks/useProperties'
 import { useUIStore } from '@/store/uiStore'
 import { formatPrice, formatDate, getPropertyTypeLabel } from '@/lib/utils'
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import SavePropertyButton from '@/components/common/SavePropertyButton'
 
 export default function PropertyDetailPage() {
@@ -14,6 +14,30 @@ export default function PropertyDetailPage() {
   const { data, isLoading, isError } = useProperty(id!)
   const { openImageDialog, isImageDialogOpen, selectedImageIndex, closeImageDialog } = useUIStore()
   const [currentImage, setCurrentImage] = useState(0)
+  const [isHovered, setIsHovered] = useState(false)
+
+  const property = data?.data
+  const images = property?.images && property.images.length > 0
+    ? property.images
+    : [{ imageUrl: '/placeholder-property.jpg', cloudinaryPublicId: '', isPrimary: true }]
+
+  const goNext = useCallback((e?: React.MouseEvent) => {
+    e?.stopPropagation()
+    setCurrentImage((prev) => (prev + 1) % images.length)
+  }, [images.length])
+
+  const goPrev = useCallback((e?: React.MouseEvent) => {
+    e?.stopPropagation()
+    setCurrentImage((prev) => (prev - 1 + images.length) % images.length)
+  }, [images.length])
+
+  useEffect(() => {
+    if (images.length <= 1 || isHovered) return
+    const interval = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % images.length)
+    }, 4000) // Auto slide every 4 seconds
+    return () => clearInterval(interval)
+  }, [images.length, isHovered])
 
   if (isLoading) return <LoadingSkeleton type="detail" />
 
@@ -26,39 +50,52 @@ export default function PropertyDetailPage() {
     )
   }
 
-  const property = data.data
   const owner = typeof property.ownerId === 'object' ? property.ownerId : null
-  const images = property.images.length > 0
-    ? property.images
-    : [{ imageUrl: '/placeholder-property.jpg', cloudinaryPublicId: '', isPrimary: true }]
 
   return (
     <div className="page-enter max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Image Gallery */}
-      <div className="relative rounded-2xl overflow-hidden bg-slate-100 mb-8">
-        <div className="aspect-video relative cursor-pointer" onClick={() => openImageDialog(currentImage)}>
-          <img
-            src={images[currentImage].imageUrl}
-            alt={property.title}
-            className="w-full h-full object-cover"
-          />
+      <div 
+        className="relative rounded-2xl overflow-hidden bg-slate-100 mb-8 group/gallery"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        <div 
+          className="aspect-video relative cursor-pointer overflow-hidden" 
+          onClick={() => openImageDialog(currentImage)}
+        >
+          {/* Sliding Track */}
+          <div
+            className="flex h-full transition-transform duration-500 ease-in-out"
+            style={{ transform: `translateX(-${currentImage * 100}%)` }}
+          >
+            {images.map((img, i) => (
+              <img
+                key={i}
+                src={img.imageUrl}
+                alt={`${property.title} - ${i + 1}`}
+                className="w-full h-full object-cover flex-shrink-0"
+              />
+            ))}
+          </div>
+
           {images.length > 1 && (
             <>
               <button
-                onClick={(e) => { e.stopPropagation(); setCurrentImage((prev) => (prev - 1 + images.length) % images.length) }}
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:bg-white transition-colors"
+                onClick={goPrev}
+                className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:bg-white transition-all opacity-0 group-hover/gallery:opacity-100 z-10"
                 aria-label="Previous image"
               >
-                <ChevronLeft className="w-5 h-5" />
+                <ChevronLeft className="w-5 h-5 text-slate-700" />
               </button>
               <button
-                onClick={(e) => { e.stopPropagation(); setCurrentImage((prev) => (prev + 1) % images.length) }}
-                className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:bg-white transition-colors"
+                onClick={goNext}
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:bg-white transition-all opacity-0 group-hover/gallery:opacity-100 z-10"
                 aria-label="Next image"
               >
-                <ChevronRight className="w-5 h-5" />
+                <ChevronRight className="w-5 h-5 text-slate-700" />
               </button>
-              <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm text-white text-xs px-3 py-1 rounded-full">
+              <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm text-white text-xs px-3 py-1 rounded-full z-10">
                 {currentImage + 1} / {images.length}
               </div>
             </>
@@ -169,13 +206,42 @@ export default function PropertyDetailPage() {
 
       {/* Fullscreen Image Dialog */}
       {isImageDialogOpen && (
-        <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center" onClick={closeImageDialog}>
+        <div className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center" onClick={closeImageDialog}>
+          {images.length > 1 && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                const prevIndex = (selectedImageIndex - 1 + images.length) % images.length
+                openImageDialog(prevIndex)
+              }}
+              className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white transition-all duration-200"
+              aria-label="Previous image"
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+          )}
+
           <img
             src={images[selectedImageIndex].imageUrl}
             alt=""
-            className="max-w-[90vw] max-h-[90vh] object-contain"
+            className="max-w-[85vw] max-h-[85vh] object-contain select-none transition-all duration-300"
             onClick={(e) => e.stopPropagation()}
           />
+
+          {images.length > 1 && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                const nextIndex = (selectedImageIndex + 1) % images.length
+                openImageDialog(nextIndex)
+              }}
+              className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white transition-all duration-200"
+              aria-label="Next image"
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
+          )}
+
           <button
             onClick={closeImageDialog}
             className="absolute top-4 right-4 w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white transition-colors"
@@ -183,6 +249,10 @@ export default function PropertyDetailPage() {
           >
             ✕
           </button>
+
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/60 text-white text-sm px-4 py-1.5 rounded-full select-none">
+            {selectedImageIndex + 1} / {images.length}
+          </div>
         </div>
       )}
     </div>

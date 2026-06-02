@@ -16,6 +16,8 @@ import {
   updateGlobalImageLimit,
   updateUserImageLimit,
 } from '../controllers/admin.controller'
+import multer from 'multer'
+import { uploadSliderImages, deleteSliderImage } from '../controllers/slider.controller'
 
 const router = Router()
 
@@ -44,5 +46,10 @@ router.patch('/users/:id/deactivate', toggleUserActive)
 router.get('/settings', getSettings)
 router.put('/settings/image-limit', updateGlobalImageLimit)
 router.put('/users/:id/image-limit', updateUserImageLimit)
+
+// Slider images (admin)
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 5 * 1024 * 1024 } })
+router.post('/sliders', upload.array('images', 10), uploadSliderImages)
+router.delete('/sliders/:id', deleteSliderImage)
 
 export default router

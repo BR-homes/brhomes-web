@@ -8,7 +8,7 @@ export const createPropertySchema = z
       .min(20, 'Description must be at least 20 characters')
       .max(2000)
       .trim(),
-    propertyType: z.enum(['house', 'flat', 'shop', 'land'], {
+    propertyType: z.enum(['house', 'flat'], {
       errorMap: () => ({ message: 'Invalid property type' }),
     }),
     listingType: z.enum(['sale', 'rent'], {
@@ -37,24 +37,12 @@ export const createPropertySchema = z
       path: ['bhk'],
     }
   )
-  .refine(
-    (data) => {
-      // BHK must be null for shop and land
-      if (['shop', 'land'].includes(data.propertyType) && data.bhk != null) {
-        return false
-      }
-      return true
-    },
-    {
-      message: 'BHK is not applicable for shop and land',
-      path: ['bhk'],
-    }
-  )
+    // No need to validate shop/land-specific BHK rules since only house/flat are allowed
 
 export const updatePropertySchema = z.object({
   title: z.string().min(5).max(150).trim().optional(),
   description: z.string().min(20).max(2000).trim().optional(),
-  propertyType: z.enum(['house', 'flat', 'shop', 'land']).optional(),
+  propertyType: z.enum(['house', 'flat']).optional(),
   listingType: z.enum(['sale', 'rent']).optional(),
   bhk: z.coerce.number().int().min(1).max(5).optional().nullable(),
   areaSqft: z.coerce.number().positive().optional().nullable(),
