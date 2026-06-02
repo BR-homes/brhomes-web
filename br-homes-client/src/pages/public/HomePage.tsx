@@ -45,7 +45,7 @@ export default function HomePage() {
       </section>
 
       {/* Property Types */}
-      <section className="py-8 bg-white border-b border-slate-100">
+      {/* <section className="py-8 bg-white border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             {[
@@ -65,7 +65,7 @@ export default function HomePage() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
 
       {/* Search + Results */}
