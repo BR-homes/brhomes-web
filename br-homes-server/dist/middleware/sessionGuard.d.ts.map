@@ -1,0 +1,1 @@
+{"version":3,"file":"sessionGuard.d.ts","sourceRoot":"","sources":["../../src/middleware/sessionGuard.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,OAAO,EAAE,QAAQ,EAAE,YAAY,EAAE,MAAM,SAAS,CAAA;AAKzD,QAAA,MAAM,YAAY,GAChB,KAAK,OAAO,EACZ,MAAM,QAAQ,EACd,MAAM,YAAY,KACjB,OAAO,CAAC,IAAI,CA0Dd,CAAA;AAED,eAAe,YAAY,CAAA"}

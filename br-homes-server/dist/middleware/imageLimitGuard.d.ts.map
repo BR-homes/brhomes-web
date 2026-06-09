@@ -1,0 +1,1 @@
+{"version":3,"file":"imageLimitGuard.d.ts","sourceRoot":"","sources":["../../src/middleware/imageLimitGuard.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,OAAO,EAAE,QAAQ,EAAE,YAAY,EAAE,MAAM,SAAS,CAAA;AAIzD;;;;GAIG;AACH,QAAA,MAAM,eAAe,GACnB,KAAK,OAAO,EACZ,MAAM,QAAQ,EACd,MAAM,YAAY,KACjB,OAAO,CAAC,IAAI,CAoBd,CAAA;AAED,eAAe,eAAe,CAAA"}
