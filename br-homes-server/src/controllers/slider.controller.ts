@@ -28,8 +28,13 @@ export const deleteSliderImage = asyncHandler(async (req: Request, res: Response
   const img = await SliderImage.findById(req.params.id)
   if (!img) throw new AppError('Image not found', 404, 'NOT_FOUND')
 
-  await deleteImage(img.cloudinaryPublicId)
-  await SliderImage.findByIdAndDelete(img._id)
+  // Try to delete from Cloudinary, but don't block DB cleanup if it fails
+  try {
+    await deleteImage(img.cloudinaryPublicId)
+  } catch (err) {
+    console.warn('Cloudinary image delete failed (continuing with DB cleanup):', err)
+  }
 
+  await SliderImage.findByIdAndDelete(img._id)
   sendSuccess(res, 'Slider image deleted', null)
 })

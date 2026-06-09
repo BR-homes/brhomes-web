@@ -83,7 +83,7 @@ export const googleLogin = asyncHandler(async (req: Request, res: Response) => {
     throw new AppError('Invalid Google token', 401, 'INVALID_CREDENTIALS')
   }
 
-  const payload = await googleRes.json()
+  const payload = (await googleRes.json()) as any
   const { email, name, picture } = payload
 
   if (!email) {

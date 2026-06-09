@@ -34,6 +34,7 @@ import ManagePropertiesPage from '@/pages/admin/ManagePropertiesPage'
 import ManageUsersPage from '@/pages/admin/ManageUsersPage'
 import SettingsPage from '@/pages/admin/SettingsPage'
 import AdminSliderPage from '@/pages/admin/AdminSliderPage'
+import AdminSidebarAdsPage from '@/pages/admin/AdminSidebarAdsPage'
 import ContactPage from '@/pages/public/ContactPage'
 
 export const router = createBrowserRouter([
@@ -98,6 +99,7 @@ export const router = createBrowserRouter([
               { path: '/admin/users', element: <ManageUsersPage /> },
               { path: '/admin/settings', element: <SettingsPage /> },
               { path: '/admin/slider', element: <AdminSliderPage /> },
+              { path: '/admin/sidebar-ads', element: <AdminSidebarAdsPage /> },
             ],
           },
         ],

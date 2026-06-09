@@ -16,7 +16,7 @@ export default function SavePropertyButton({ propertyId, className = '', variant
   const { mutate: saveProperty, isPending: isSaving } = useSaveProperty()
   const { mutate: unsaveProperty, isPending: isUnsaving } = useUnsaveProperty()
 
-  const isSaved = Array.isArray(savedProperties) && savedProperties.some((s) => s.property?._id === propertyId || s.property === propertyId)
+  const isSaved = Array.isArray(savedProperties) && savedProperties.some((s) => s.property?._id === propertyId || (s.property as any) === propertyId)
   const isLoading = isSaving || isUnsaving
 
   const handleClick = (e: React.MouseEvent) => {

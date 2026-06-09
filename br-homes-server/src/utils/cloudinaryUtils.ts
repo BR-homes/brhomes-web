@@ -41,6 +41,14 @@ export const deleteImage = async (publicId: string): Promise<void> => {
 }
 
 /**
+ * Delete a video from Cloudinary by its public ID.
+ * Videos require resource_type: 'video' to be deleted properly.
+ */
+export const deleteVideo = async (publicId: string): Promise<void> => {
+  await cloudinary.uploader.destroy(publicId, { resource_type: 'video' })
+}
+
+/**
  * Delete multiple images from Cloudinary.
  */
 export const deleteImages = async (publicIds: string[]): Promise<void> => {
@@ -48,3 +56,32 @@ export const deleteImages = async (publicIds: string[]): Promise<void> => {
   const promises = publicIds.map((id) => deleteImage(id))
   await Promise.allSettled(promises)
 }
+
+/**
+ * Upload video buffer to Cloudinary.
+ * Returns the secure URL and public ID.
+ */
+export const uploadVideo = async (
+  fileBuffer: Buffer,
+  folder: string = 'br-homes/videos'
+): Promise<{ videoUrl: string; cloudinaryPublicId: string }> => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      {
+        folder,
+        resource_type: 'video',
+      },
+      (error, result) => {
+        if (error || !result) {
+          return reject(error || new Error('Video upload failed'))
+        }
+        resolve({
+          videoUrl: result.secure_url,
+          cloudinaryPublicId: result.public_id,
+        })
+      }
+    )
+    stream.end(fileBuffer)
+  })
+}
+

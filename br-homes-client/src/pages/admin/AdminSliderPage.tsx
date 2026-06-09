@@ -13,7 +13,9 @@ export default function AdminSliderPage() {
 
   const uploadMut = useMutation({
     mutationFn: async (form: FormData) => {
-      const res = await api.post('/api/admin/sliders', form)
+      const res = await api.post('/api/admin/sliders', form, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
       return res.data
     },
     onSuccess: () => {

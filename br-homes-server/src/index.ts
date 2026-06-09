@@ -13,6 +13,7 @@ import ownerRoutes from './routes/owner.routes'
 import savedRoutes from './routes/saved.routes'
 import adminRoutes from './routes/admin.routes'
 import sliderRoutes from './routes/slider.routes'
+import sidebarAdRoutes from './routes/sidebarAd.routes'
 import User from './models/User.model'
 import Setting from './models/Setting.model'
 
@@ -52,6 +53,7 @@ const start = async () => {
   app.use('/api/owner', ownerRoutes)
   app.use('/api/saved', savedRoutes)
   app.use('/api/sliders', sliderRoutes)
+  app.use('/api/sidebar-ads', sidebarAdRoutes)
   app.use('/api/admin', adminRoutes)
 
   // 4. Global error handler — MUST be last

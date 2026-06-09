@@ -89,3 +89,10 @@ export interface ISetting {
   updatedBy: string | null
   updatedAt: string
 }
+
+export interface ISidebarAd {
+  _id: string
+  videoUrl: string
+  cloudinaryPublicId: string
+  createdAt: string
+}
