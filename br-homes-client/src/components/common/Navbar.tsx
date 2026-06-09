@@ -92,12 +92,10 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 group" onClick={closeMobileMenu}>
-            <div className="w-8 h-8 rounded-lg gradient-primary flex items-center justify-center group-hover:scale-105 transition-transform">
-              <Home className="w-4 h-4 text-white" />
-            </div>
-            <span className="text-xl font-bold text-slate-900 tracking-tight">
+            <img src="/logo.jpg" alt="BR-Homes Logo" className="h-10" />
+            {/* <span className="text-xl font-bold text-slate-900 tracking-tight">
               BR<span className="text-slate-500">-Homes</span>
-            </span>
+            </span> */}
           </Link>
 
           {/* Desktop Nav */}

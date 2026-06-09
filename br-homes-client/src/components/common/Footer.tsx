@@ -9,9 +9,7 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <Link to="/" className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
-                <Home className="w-4 h-4 text-white" />
-              </div>
+              <img src="/logo.jpg" alt="BR-Homes Logo" className="h-10" />
               <span className="text-xl font-bold text-white tracking-tight">
                 BR<span className="text-slate-400">-Homes</span>
               </span>
