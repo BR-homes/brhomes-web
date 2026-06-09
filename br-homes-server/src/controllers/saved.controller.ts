@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import asyncHandler from '../utils/asyncHandler'
 import AppError from '../utils/AppError'
 import { sendSuccess } from '../utils/responseHandler'
+import Property from '../models/Property.model'
 import SavedProperty from '../models/SavedProperty.model'
 
 /**
@@ -14,6 +15,8 @@ export const getSavedProperties = asyncHandler(
       .populate({
         path: 'propertyId',
         match: { status: { $in: ['approved', 'sold', 'rented'] } },
+        select:
+          'ownerId title description propertyType listingType bhk areaSqft price city areaLocality pincode contactPhone status rejectionNote images createdAt updatedAt approvalRequestedAt',
       })
       .sort({ savedAt: -1 })
       .lean()
@@ -38,6 +41,17 @@ export const getSavedProperties = asyncHandler(
 export const saveProperty = asyncHandler(async (req: Request, res: Response) => {
   const { propertyId } = req.params
   const userId = req.sessionUser!.id
+
+  const property = await Property.findOne({
+    _id: propertyId,
+    status: { $in: ['approved', 'sold', 'rented'] },
+  })
+    .select('_id')
+    .lean()
+
+  if (!property) {
+    throw new AppError('Property not found', 404, 'NOT_FOUND')
+  }
 
   try {
     const saved = await SavedProperty.create({

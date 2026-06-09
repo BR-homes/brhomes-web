@@ -9,8 +9,8 @@ import {
 
 const router = Router()
 
-// Allow both buyers and owners to save properties
-router.use(sessionGuard, roleGuard('buyer', 'owner'))
+// Allow any authenticated role to save properties
+router.use(sessionGuard, roleGuard('buyer', 'owner', 'admin'))
 
 router.get('/', getSavedProperties)
 router.post('/:propertyId', saveProperty)

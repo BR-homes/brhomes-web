@@ -21,6 +21,11 @@ export interface IProperty extends Document {
   pincode: string
   contactPhone: string
   status: 'pending' | 'approved' | 'rejected' | 'hidden' | 'sold' | 'rented'
+  approvalRequestedAt: Date | null
+  approvedAt: Date | null
+  approvedBy: Types.ObjectId | null
+  rejectedAt: Date | null
+  rejectedBy: Types.ObjectId | null
   rejectionNote: string | null
   images: IPropertyImage[]
   createdAt: Date
@@ -114,6 +119,29 @@ const propertySchema = new Schema<IProperty>(
       enum: ['pending', 'approved', 'rejected', 'hidden', 'sold', 'rented'],
       default: 'pending',
     },
+    approvalRequestedAt: {
+      type: Date,
+      default: null,
+      index: true,
+    },
+    approvedAt: {
+      type: Date,
+      default: null,
+    },
+    approvedBy: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      default: null,
+    },
+    rejectedAt: {
+      type: Date,
+      default: null,
+    },
+    rejectedBy: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      default: null,
+    },
     rejectionNote: {
       type: String,
       default: null,
@@ -137,6 +165,9 @@ propertySchema.index({
   propertyType: 1,
   listingType: 1,
 })
+
+// Queue index for pending approval processing
+propertySchema.index({ status: 1, approvalRequestedAt: 1, createdAt: 1 })
 
 const Property = mongoose.model<IProperty>('Property', propertySchema)
 export default Property

@@ -6,6 +6,7 @@ import {
   getPendingOwners,
   approveOwner,
   getPendingProperties,
+  getPropertyApprovalQueue,
   approveProperty,
   rejectProperty,
   getAllProperties,
@@ -33,6 +34,7 @@ router.put('/owners/:id/approve', approveOwner)
 
 // Property management
 router.get('/properties/pending', getPendingProperties)
+router.get('/properties/approval-queue', getPropertyApprovalQueue)
 router.put('/properties/:id/approve', approveProperty)
 router.put('/properties/:id/reject', rejectProperty)
 router.get('/properties', getAllProperties)

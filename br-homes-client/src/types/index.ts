@@ -39,6 +39,8 @@ export interface IProperty {
   pincode: string
   contactPhone: string
   status: PropertyStatus
+  approvalRequestedAt?: string | null
+  queuePosition?: number | null
   rejectionNote: string | null
   images: IPropertyImage[]
   createdAt: string

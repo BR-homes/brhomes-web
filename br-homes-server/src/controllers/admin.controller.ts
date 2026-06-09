@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { Types } from 'mongoose'
 import asyncHandler from '../utils/asyncHandler'
 import AppError from '../utils/AppError'
 import { sendSuccess } from '../utils/responseHandler'
@@ -76,7 +77,7 @@ export const getPendingOwners = asyncHandler(
  */
 export const approveOwner = asyncHandler(async (req: Request, res: Response) => {
   const user = await User.findById(req.params.id)
-  if (!user || user.role !== 'owner') {
+  if (user?.role !== 'owner') {
     throw new AppError('Owner not found', 404, 'NOT_FOUND')
   }
 
@@ -107,10 +108,46 @@ export const getPendingProperties = asyncHandler(
   async (_req: Request, res: Response) => {
     const properties = await Property.find({ status: 'pending' })
       .populate('ownerId', 'name email phone')
-      .sort({ createdAt: -1 })
+      .sort({ approvalRequestedAt: 1, createdAt: 1 })
       .lean()
 
-    sendSuccess(res, 'Pending properties retrieved', properties)
+    const queued = properties.map((property, index) => ({
+      ...property,
+      queuePosition: index + 1,
+    }))
+
+    sendSuccess(res, 'Pending properties retrieved', queued)
+  }
+)
+
+/**
+ * GET /api/admin/properties/approval-queue
+ * Approval queue summary for admin operations
+ */
+export const getPropertyApprovalQueue = asyncHandler(
+  async (_req: Request, res: Response) => {
+    const pending = await Property.find({ status: 'pending' })
+      .populate('ownerId', 'name')
+      .select('title approvalRequestedAt createdAt ownerId')
+      .sort({ approvalRequestedAt: 1, createdAt: 1 })
+      .lean()
+
+    const items = pending.map((property, index) => ({
+      propertyId: property._id,
+      title: property.title,
+      ownerName:
+        typeof property.ownerId === 'object' && property.ownerId?.name
+          ? property.ownerId.name
+          : 'Unknown',
+      approvalRequestedAt: property.approvalRequestedAt || property.createdAt,
+      queuePosition: index + 1,
+    }))
+
+    sendSuccess(res, 'Approval queue retrieved', {
+      totalPending: items.length,
+      oldestRequestedAt: items[0]?.approvalRequestedAt ?? null,
+      items,
+    })
   }
 )
 
@@ -126,6 +163,11 @@ export const approveProperty = asyncHandler(
     }
 
     property.status = 'approved'
+    property.approvedAt = new Date()
+    property.approvedBy = new Types.ObjectId(req.sessionUser!.id)
+    property.rejectedAt = null
+    property.rejectedBy = null
+    property.approvalRequestedAt = null
     property.rejectionNote = null
     await property.save()
 
@@ -158,6 +200,11 @@ export const rejectProperty = asyncHandler(
     }
 
     property.status = 'rejected'
+    property.rejectedAt = new Date()
+    property.rejectedBy = new Types.ObjectId(req.sessionUser!.id)
+    property.approvedAt = null
+    property.approvedBy = null
+    property.approvalRequestedAt = null
     property.rejectionNote = parsed.data.rejectionNote
     await property.save()
 
@@ -193,8 +240,8 @@ export const getAllProperties = asyncHandler(
     if (propertyType) filter.propertyType = propertyType
     if (city && typeof city === 'string') filter.city = new RegExp(city, 'i')
 
-    const pageNum = Math.max(1, parseInt(page as string, 10) || 1)
-    const limitNum = Math.min(50, parseInt(limit as string, 10) || 12)
+    const pageNum = Math.max(1, Number.parseInt(page as string, 10) || 1)
+    const limitNum = Math.min(50, Number.parseInt(limit as string, 10) || 12)
     const skip = (pageNum - 1) * limitNum
 
     const [properties, total] = await Promise.all([
@@ -266,8 +313,8 @@ export const getAllUsers = asyncHandler(async (req: Request, res: Response) => {
     ]
   }
 
-  const pageNum = Math.max(1, parseInt(page as string, 10) || 1)
-  const limitNum = Math.min(50, parseInt(limit as string, 10) || 20)
+  const pageNum = Math.max(1, Number.parseInt(page as string, 10) || 1)
+  const limitNum = Math.min(50, Number.parseInt(limit as string, 10) || 20)
   const skip = (pageNum - 1) * limitNum
 
   const [users, total] = await Promise.all([

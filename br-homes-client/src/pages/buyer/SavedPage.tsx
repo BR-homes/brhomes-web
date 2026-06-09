@@ -1,12 +1,10 @@
-import { Heart, Trash2 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { Heart } from 'lucide-react'
 import PropertyGrid from '@/components/common/PropertyGrid'
 import LoadingSkeleton from '@/components/common/LoadingSkeleton'
-import { useSavedProperties, useUnsaveProperty } from '@/hooks/useSaved'
+import { useSavedPropertiesForUser } from '@/hooks/useSaved'
 
 export default function SavedPage() {
-  const { data: saved = [], isLoading } = useSavedProperties()
-  const { mutate: unsave } = useUnsaveProperty()
+  const { data: saved = [], isLoading } = useSavedPropertiesForUser(true)
 
   const properties = Array.isArray(saved) ? saved.map((s) => s.property).filter(Boolean) : []
 

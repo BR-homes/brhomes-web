@@ -1,6 +1,6 @@
 import { Heart } from 'lucide-react'
 import { useAuthStore } from '@/store/authStore'
-import { useSavedProperties, useSaveProperty, useUnsaveProperty } from '@/hooks/useSaved'
+import { useSavedPropertiesForUser, useSaveProperty, useUnsaveProperty } from '@/hooks/useSaved'
 import { Button } from '@/components/ui/button'
 import { toast } from 'react-hot-toast'
 
@@ -10,9 +10,9 @@ interface SavePropertyButtonProps {
   variant?: 'icon' | 'full'
 }
 
-export default function SavePropertyButton({ propertyId, className = '', variant = 'icon' }: SavePropertyButtonProps) {
-  const { isAuthenticated, user } = useAuthStore()
-  const { data: savedProperties = [] } = useSavedProperties()
+export default function SavePropertyButton({ propertyId, className = '', variant = 'icon' }: Readonly<SavePropertyButtonProps>) {
+  const { isAuthenticated } = useAuthStore()
+  const { data: savedProperties = [] } = useSavedPropertiesForUser(isAuthenticated)
   const { mutate: saveProperty, isPending: isSaving } = useSaveProperty()
   const { mutate: unsaveProperty, isPending: isUnsaving } = useUnsaveProperty()
 

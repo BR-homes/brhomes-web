@@ -1,11 +1,12 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import api from '@/lib/axios'
 import type { ISavedProperty } from '@/types'
 import { queryKeys } from '@/lib/queryClient'
 
-export function useSavedProperties() {
+export function useSavedPropertiesForUser(enabled: boolean) {
   return useQuery({
     queryKey: queryKeys.saved.all,
+    enabled,
     queryFn: async () => {
       const { data } = await api.get('/api/saved')
       return data.data as ISavedProperty[]

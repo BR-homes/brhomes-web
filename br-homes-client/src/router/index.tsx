@@ -59,11 +59,11 @@ export const router = createBrowserRouter([
       { path: '/properties', element: <ListingsPage /> },
       { path: '/properties/:id', element: <PropertyDetailPage /> },
 
-      // Buyer routes (requires buyer role)
+      // Shared authenticated routes
       {
-        element: <ProtectedRoute allowedRoles={['buyer']} />,
+        element: <ProtectedRoute allowedRoles={['buyer', 'owner', 'admin']} />,
         children: [
-          { path: '/buyer/saved', element: <SavedPage /> },
+          { path: '/saved', element: <SavedPage /> },
         ],
       },
 
@@ -75,7 +75,6 @@ export const router = createBrowserRouter([
             element: <DashboardLayout />,
             children: [
               { path: '/owner/dashboard', element: <OwnerDashboardPage /> },
-              { path: '/owner/saved', element: <SavedPage /> },
               { path: '/owner/properties', element: <OwnerPropertiesPage /> },
               { path: '/owner/add-property', element: <AddPropertyPage /> },
               { path: '/owner/edit-property/:id', element: <EditPropertyPage /> },

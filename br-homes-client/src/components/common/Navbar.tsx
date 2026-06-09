@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom'
-import { Home, Menu, X, LogOut, User, LayoutDashboard, Heart, Building2, Shield } from 'lucide-react'
+import { Menu, X, LogOut, User, LayoutDashboard, Heart, Building2, Shield } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useAuthStore } from '@/store/authStore'
 import { useUIStore } from '@/store/uiStore'
@@ -49,7 +49,7 @@ export default function Navbar() {
               <Building2 className="w-4 h-4" /> Browse
             </Link>
             <Link to="/contact" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium">Contact</Link>
-            <Link to="/buyer/saved" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium flex items-center gap-1.5">
+            <Link to="/saved" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium flex items-center gap-1.5">
               <Heart className="w-4 h-4" /> Saved
             </Link>
           </>
@@ -60,7 +60,7 @@ export default function Navbar() {
             <Link to="/owner/dashboard" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium flex items-center gap-1.5">
               <LayoutDashboard className="w-4 h-4" /> Dashboard
             </Link>
-            <Link to="/owner/saved" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium flex items-center gap-1.5">
+            <Link to="/saved" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium flex items-center gap-1.5">
               <Heart className="w-4 h-4" /> Saved
             </Link>
             <Link to="/contact" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium">Contact</Link>
@@ -74,6 +74,9 @@ export default function Navbar() {
           <>
             <Link to="/admin/dashboard" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium flex items-center gap-1.5">
               <Shield className="w-4 h-4" /> Admin Panel
+            </Link>
+            <Link to="/saved" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium flex items-center gap-1.5">
+              <Heart className="w-4 h-4" /> Saved
             </Link>
             <Link to="/contact" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium">Contact</Link>
             <Link to="/properties" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium flex items-center gap-1.5">

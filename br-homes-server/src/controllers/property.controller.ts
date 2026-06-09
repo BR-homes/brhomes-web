@@ -148,6 +148,7 @@ export const createProperty = asyncHandler(
       bhk,
       ownerId: req.sessionUser!.id,
       status: 'pending',
+      approvalRequestedAt: new Date(),
       images,
     })
 
@@ -222,6 +223,11 @@ export const updateProperty = asyncHandler(
     // Re-set status to pending on edit (needs re-approval)
     if (['approved', 'rejected'].includes(property.status)) {
       property.status = 'pending'
+      property.approvalRequestedAt = new Date()
+      property.approvedAt = null
+      property.approvedBy = null
+      property.rejectedAt = null
+      property.rejectedBy = null
       property.rejectionNote = null
     }
 

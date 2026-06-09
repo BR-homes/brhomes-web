@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import asyncHandler from '../utils/asyncHandler'
+import AppError from '../utils/AppError'
 import { sendSuccess } from '../utils/responseHandler'
 import Property from '../models/Property.model'
 import Setting from '../models/Setting.model'
@@ -17,7 +18,74 @@ export const getOwnerProperties = asyncHandler(
       .sort({ createdAt: -1 })
       .lean()
 
-    sendSuccess(res, 'Owner properties retrieved', properties)
+    const pendingQueue = await Property.find({ status: 'pending' })
+      .select('_id')
+      .sort({ approvalRequestedAt: 1, createdAt: 1 })
+      .lean()
+
+    const queueMap = new Map<string, number>()
+    pendingQueue.forEach((item, index) => {
+      queueMap.set(item._id.toString(), index + 1)
+    })
+
+    const enriched = properties.map((property) => ({
+      ...property,
+      queuePosition:
+        property.status === 'pending'
+          ? queueMap.get(property._id.toString()) || null
+          : null,
+    }))
+
+    sendSuccess(res, 'Owner properties retrieved', enriched)
+  }
+)
+
+/**
+ * GET /api/owner/properties/:id/approval-queue
+ * Queue position for one owner property
+ */
+export const getOwnerPropertyQueueStatus = asyncHandler(
+  async (req: Request, res: Response) => {
+    const ownerId = req.sessionUser!.id
+    const property = await Property.findById(req.params.id)
+      .select('ownerId status approvalRequestedAt createdAt')
+      .lean()
+
+    if (property?.ownerId?.toString() !== ownerId) {
+      throw new AppError('Property not found', 404, 'NOT_FOUND')
+    }
+
+    if (property.status !== 'pending') {
+      sendSuccess(res, 'Property is not in approval queue', {
+        status: property.status,
+        approvalRequestedAt: property.approvalRequestedAt,
+        queuePosition: null,
+        totalPendingAhead: null,
+      })
+      return
+    }
+
+    const pendingAhead = await Property.countDocuments({
+      status: 'pending',
+      $or: [
+        {
+          approvalRequestedAt: {
+            $lt: property.approvalRequestedAt || property.createdAt,
+          },
+        },
+        {
+          approvalRequestedAt: property.approvalRequestedAt || property.createdAt,
+          createdAt: { $lt: property.createdAt },
+        },
+      ],
+    })
+
+    sendSuccess(res, 'Property queue status retrieved', {
+      status: property.status,
+      approvalRequestedAt: property.approvalRequestedAt || property.createdAt,
+      queuePosition: pendingAhead + 1,
+      totalPendingAhead: pendingAhead,
+    })
   }
 )
 
