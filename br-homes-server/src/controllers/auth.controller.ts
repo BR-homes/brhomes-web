@@ -108,6 +108,19 @@ export const googleLogin = asyncHandler(async (req: Request, res: Response) => {
     if (!user.isActive) {
       throw new AppError('Your account has been deactivated', 403, 'ACCOUNT_DEACTIVATED')
     }
+
+    // If user registered via email/password, mark email as verified
+    // (Google has already verified it) and update image if missing
+    const updates: Record<string, any> = {}
+    if (!user.emailVerified) {
+      updates.emailVerified = new Date()
+    }
+    if (!user.image && picture) {
+      updates.image = picture
+    }
+    if (Object.keys(updates).length > 0) {
+      user = (await User.findByIdAndUpdate(user._id, updates, { new: true }))!
+    }
   }
 
   const jwtToken = generateToken(user._id.toString())
