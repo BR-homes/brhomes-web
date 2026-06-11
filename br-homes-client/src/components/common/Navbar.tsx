@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom'
-import { Menu, X, LogOut, User, LayoutDashboard, Heart, Building2, Shield } from 'lucide-react'
+import { Menu, X, LogOut, User, LayoutDashboard, Heart, Building2, Shield, Phone } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useAuthStore } from '@/store/authStore'
 import { useUIStore } from '@/store/uiStore'
@@ -28,8 +28,8 @@ export default function Navbar() {
           <Link to="/properties" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium">
             Browse
           </Link>
-          <Link to="/contact" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium">
-            Contact
+          <Link to="/contact" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium flex items-center gap-1.5">
+            <Phone className="w-4 h-4" /> Contact
           </Link>
           <Link to="/login" onClick={closeMobileMenu}>
             <Button variant="ghost" size="sm">Login</Button>
@@ -48,7 +48,9 @@ export default function Navbar() {
             <Link to="/properties" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium flex items-center gap-1.5">
               <Building2 className="w-4 h-4" /> Browse
             </Link>
-            <Link to="/contact" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium">Contact</Link>
+            <Link to="/contact" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium flex items-center gap-1.5">
+              <Phone className="w-4 h-4" /> Contact
+            </Link>
             <Link to="/saved" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium flex items-center gap-1.5">
               <Heart className="w-4 h-4" /> Saved
             </Link>
@@ -63,7 +65,9 @@ export default function Navbar() {
             <Link to="/saved" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium flex items-center gap-1.5">
               <Heart className="w-4 h-4" /> Saved
             </Link>
-            <Link to="/contact" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium">Contact</Link>
+            <Link to="/contact" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium flex items-center gap-1.5">
+              <Phone className="w-4 h-4" /> Contact
+            </Link>
             <Link to="/properties" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium flex items-center gap-1.5">
               <Building2 className="w-4 h-4" /> Browse
             </Link>
@@ -78,7 +82,9 @@ export default function Navbar() {
             <Link to="/saved" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium flex items-center gap-1.5">
               <Heart className="w-4 h-4" /> Saved
             </Link>
-            <Link to="/contact" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium">Contact</Link>
+            <Link to="/contact" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium flex items-center gap-1.5">
+              <Phone className="w-4 h-4" /> Contact
+            </Link>
             <Link to="/properties" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium flex items-center gap-1.5">
               <Building2 className="w-4 h-4" /> Browse
             </Link>

@@ -54,8 +54,8 @@ export default function PropertyDetailPage() {
   const owner = typeof property.ownerId === 'object' ? property.ownerId : null
 
   return (
-    <div className="page-enter w-full px-4 sm:px-6 lg:px-8 py-8">
-      <div className="grid grid-cols-1 lg:grid-cols-[7fr_3fr] gap-8">
+    <div className="page-enter max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
+      <div className="grid grid-cols-1 lg:grid-cols-[7.7fr_2.3fr] gap-8">
         {/* Details */}
         <div className="space-y-6">
           {/* Image Gallery */}
@@ -179,7 +179,7 @@ export default function PropertyDetailPage() {
 
               {/* Mobile Ad Slider (Visible only on mobile/tablet screens) */}
               <div className="block lg:hidden">
-                <SidebarAdSlider layout="inline" />
+                <SidebarAdSlider id="mobile-detail-ad-1" layout="inline" />
               </div>
             </div>
 
@@ -216,8 +216,9 @@ export default function PropertyDetailPage() {
 
         {/* Sidebar: Advertisement Videos (Muted Autoplay sequential) */}
         <div className="hidden lg:block">
-          <div className="sticky top-24">
-            <SidebarAdSlider layout="sidebar" />
+          <div className="sticky top-24 space-y-4 w-full">
+            <SidebarAdSlider id="sidebar-ad-1" layout="sidebar" />
+            <SidebarAdSlider id="sidebar-ad-2" layout="sidebar" />
           </div>
         </div>
       </div>

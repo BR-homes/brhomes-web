@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom'
-import { ArrowRight, Shield, Phone, Search, Building2, Home } from 'lucide-react'
+import { ArrowRight, Shield, Phone, Search, Building2, Home, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import PropertyGrid from '@/components/common/PropertyGrid'
 import LoadingSkeleton from '@/components/common/LoadingSkeleton'
+import SidebarAdSlider from '@/components/common/SidebarAdSlider'
 import { useProperties } from '@/hooks/useProperties'
 import { useSliderImages } from '@/hooks/useSliderImages'
 import { useFilterStore } from '@/store/filterStore'
@@ -15,27 +16,88 @@ export default function HomePage() {
   const { data: sliderData } = useSliderImages()
   const sliderImages = sliderData?.data || []
   const [index, setIndex] = useState(0)
+  const [isHovered, setIsHovered] = useState(false)
+
   useEffect(() => {
-    const id = setInterval(() => setIndex((i) => (sliderImages.length ? (i + 1) % sliderImages.length : 0)), 4000)
+    if (sliderImages.length <= 1 || isHovered) return
+    const id = setInterval(() => {
+      setIndex((i) => (i + 1) % sliderImages.length)
+    }, 4000)
     return () => clearInterval(id)
-  }, [sliderImages.length])
+  }, [sliderImages.length, isHovered])
+
+  const handlePrev = (e?: React.MouseEvent) => {
+    e?.stopPropagation()
+    setIndex((prev) => (prev - 1 + sliderImages.length) % sliderImages.length)
+  }
+
+  const handleNext = (e?: React.MouseEvent) => {
+    e?.stopPropagation()
+    setIndex((prev) => (prev + 1) % sliderImages.length)
+  }
+
+  const handleDotClick = (i: number) => {
+    setIndex(i)
+  }
 
   return (
     <div className="page-enter">
       {/* Slider Section (admin-managed) */}
       <section className="relative overflow-hidden bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="rounded-xl overflow-hidden bg-white shadow-sm">
+          <div 
+            className="rounded-xl overflow-hidden bg-white shadow-sm relative group"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
             {sliderImages.length > 0 ? (
-              <div className="relative h-64 sm:h-96">
+              <div className="relative h-64 sm:h-96 w-full overflow-hidden">
                 {sliderImages.map((img: any, i: number) => (
                   <img
                     key={img._id}
                     src={img.imageUrl}
                     alt={`slide-${i}`}
-                    className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${i === index ? 'opacity-100' : 'opacity-0'}`}
+                    className={`absolute inset-0 w-full h-full object-cover transition-all duration-1000 ease-in-out transform ${
+                      i === index ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
+                    }`}
                   />
                 ))}
+
+                {/* Left/Right Buttons */}
+                {sliderImages.length > 1 && (
+                  <>
+                    <button
+                      onClick={handlePrev}
+                      className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/85 hover:bg-white backdrop-blur-sm text-slate-800 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 opacity-0 group-hover:opacity-100 focus:outline-none z-10"
+                      aria-label="Previous slide"
+                    >
+                      <ChevronLeft className="w-6 h-6" />
+                    </button>
+                    <button
+                      onClick={handleNext}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/85 hover:bg-white backdrop-blur-sm text-slate-800 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 opacity-0 group-hover:opacity-100 focus:outline-none z-10"
+                      aria-label="Next slide"
+                    >
+                      <ChevronRight className="w-6 h-6" />
+                    </button>
+
+                    {/* Dots indicators */}
+                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 z-10">
+                      {sliderImages.map((_, i) => (
+                        <button
+                          key={i}
+                          onClick={() => handleDotClick(i)}
+                          className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                            i === index 
+                              ? 'bg-blue-600 w-6' 
+                              : 'bg-white/60 hover:bg-white'
+                          }`}
+                          aria-label={`Go to slide ${i + 1}`}
+                        />
+                      ))}
+                    </div>
+                  </>
+                )}
               </div>
             ) : (
               <div className="h-64 sm:h-96 flex items-center justify-center text-slate-500">No slider images configured</div>
@@ -88,6 +150,14 @@ export default function HomePage() {
                 <option value="house">House</option>
                 <option value="flat">Flat</option>
               </select>
+            </div>
+          </div>
+
+          {/* Ads Section in the Middle of Components */}
+          <div className="max-w-4xl mx-auto mb-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <SidebarAdSlider id="homepage-ad-1" layout="inline" />
+              <SidebarAdSlider id="homepage-ad-2" layout="inline" />
             </div>
           </div>
 
