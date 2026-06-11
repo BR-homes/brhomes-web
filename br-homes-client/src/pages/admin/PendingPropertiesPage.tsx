@@ -121,18 +121,26 @@ export default function PendingPropertiesPage() {
 
                   {/* Rejection Note */}
                   {rejectId === prop._id && (
-                    <div className="mt-3 flex gap-2">
-                      <Input
-                        placeholder="Reason for rejection (min 10 chars)..."
-                        value={rejectionNote}
-                        onChange={(e) => setRejectionNote(e.target.value)}
-                        className="flex-1"
-                      />
+                    <div className="mt-3 flex gap-2 items-start">
+                      <div className="flex-1">
+                        <Input
+                          placeholder="Reason for rejection (min 10 chars)..."
+                          value={rejectionNote}
+                          onChange={(e) => setRejectionNote(e.target.value)}
+                          className="w-full"
+                        />
+                        {rejectionNote && rejectionNote.length < 10 && (
+                          <p className="text-red-500 text-xs mt-1">
+                            Must be at least 10 characters (current: {rejectionNote.length})
+                          </p>
+                        )}
+                      </div>
                       <Button
                         size="sm"
                         variant="destructive"
                         disabled={rejectionNote.length < 10 || rejectMutation.isPending}
                         onClick={() => rejectMutation.mutate({ id: prop._id, note: rejectionNote })}
+                        className="self-start"
                       >
                         Confirm
                       </Button>

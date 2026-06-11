@@ -15,7 +15,7 @@ export const createPropertySchema = z
       errorMap: () => ({ message: 'Listing type must be sale or rent' }),
     }),
     bhk: z.coerce.number().int().min(1).max(5).optional().nullable(),
-    areaSqft: z.coerce.number().positive().optional().nullable(),
+    areaSqft: z.coerce.number().positive('Property area must be a positive number'),
     price: z.coerce.number().positive('Price must be a positive number'),
     city: z.string().min(2).max(100).trim(),
     areaLocality: z.string().min(2, 'Area/locality is required').max(200).trim(),
@@ -51,7 +51,14 @@ export const updatePropertySchema = z.object({
   areaLocality: z.string().min(2).max(200).trim().optional(),
   pincode: z.string().regex(/^\d{6}$/).optional(),
   contactPhone: z.string().regex(/^[6-9]\d{9}$/).optional(),
-  removeImages: z.array(z.string()).optional(),
+  removeImages: z.preprocess(
+    (val) => {
+      if (typeof val === 'string') return [val]
+      if (Array.isArray(val)) return val
+      return val
+    },
+    z.array(z.string())
+  ).optional(),
 })
 
 export const markPropertySchema = z.object({

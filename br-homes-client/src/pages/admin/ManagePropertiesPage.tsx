@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { Building2, Trash2, MapPin } from 'lucide-react'
+import { Building2, Trash2, MapPin, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import LoadingSkeleton from '@/components/common/LoadingSkeleton'
+import ConfirmationModal from '@/components/common/ConfirmationModal'
 import { queryKeys } from '@/lib/queryClient'
 import { formatPrice, getPropertyTypeLabel, getStatusColor } from '@/lib/utils'
 import api from '@/lib/axios'
@@ -13,6 +14,7 @@ export default function ManagePropertiesPage() {
   const queryClient = useQueryClient()
   const [statusFilter, setStatusFilter] = useState('')
   const [page, setPage] = useState(1)
+  const [deleteId, setDeleteId] = useState<string | null>(null)
 
   const { data, isLoading } = useQuery({
     queryKey: queryKeys.admin.allProperties({ status: statusFilter, page }),
@@ -89,11 +91,16 @@ export default function ManagePropertiesPage() {
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={() => { if (confirm('Delete this property permanently?')) deleteMutation.mutate(prop._id) }}
+                    disabled={deleteMutation.isPending}
+                    onClick={() => setDeleteId(prop._id)}
                     className="text-red-500 hover:text-red-600 hover:bg-red-50 flex-shrink-0"
                     aria-label="Delete property"
                   >
-                    <Trash2 className="w-4 h-4" />
+                    {deleteMutation.isPending && deleteMutation.variables === prop._id ? (
+                      <Loader2 className="w-4 h-4 animate-spin text-red-500" />
+                    ) : (
+                      <Trash2 className="w-4 h-4" />
+                    )}
                   </Button>
                 </div>
               )
@@ -109,6 +116,22 @@ export default function ManagePropertiesPage() {
           )}
         </>
       )}
+
+      <ConfirmationModal
+        isOpen={deleteId !== null}
+        onClose={() => setDeleteId(null)}
+        onConfirm={() => {
+          if (deleteId) {
+            deleteMutation.mutate(deleteId, {
+              onSuccess: () => setDeleteId(null)
+            })
+          }
+        }}
+        title="Delete Property"
+        message="Are you sure you want to delete this property permanently? This action cannot be undone."
+        confirmText="Delete permanently"
+        isPending={deleteMutation.isPending}
+      />
     </div>
   )
 }

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -9,17 +10,35 @@ import { useImageUpload } from '@/hooks/useImageUpload'
 import type { IProperty } from '@/types'
 
 const propertySchema = z.object({
-  title: z.string().min(5, 'Title must be at least 5 characters').max(150),
-  description: z.string().min(20, 'Description must be at least 20 characters').max(2000),
+  title: z.string().min(5, 'Title must be at least 5 characters').max(150, 'Title cannot exceed 150 characters'),
+  description: z.string().min(20, 'Description must be at least 20 characters').max(2000, 'Description cannot exceed 2000 characters'),
   propertyType: z.enum(['house', 'flat']),
   listingType: z.enum(['sale', 'rent']),
   bhk: z.string().optional(),
-  areaSqft: z.string().optional(),
-  price: z.string().min(1, 'Price is required'),
-  city: z.string().min(2, 'City is required'),
-  areaLocality: z.string().min(2, 'Area/locality is required'),
-  pincode: z.string().regex(/^\d{6}$/, 'Must be 6 digits'),
-  contactPhone: z.string().regex(/^[6-9]\d{9}$/, 'Enter valid 10-digit number'),
+  areaSqft: z.string()
+    .min(1, 'Property area is required')
+    .refine((val) => {
+      const num = Number(val);
+      return !isNaN(num) && num > 0;
+    }, { message: 'Property area must be a positive number (greater than 0)' }),
+  price: z.string()
+    .min(1, 'Price is required')
+    .refine((val) => {
+      const num = Number(val);
+      return !isNaN(num) && num > 0;
+    }, { message: 'Price must be a positive number (greater than 0)' }),
+  city: z.string().min(2, 'City is required (at least 2 characters)'),
+  areaLocality: z.string().min(2, 'Area/locality is required (at least 2 characters)'),
+  pincode: z.string().regex(/^\d{6}$/, 'Pincode must be exactly 6 digits'),
+  contactPhone: z.string().regex(/^[6-9]\d{9}$/, 'Enter a valid 10-digit Indian mobile number starting with 6-9'),
+}).refine((data) => {
+  if (['house', 'flat'].includes(data.propertyType)) {
+    return !!data.bhk && data.bhk !== '';
+  }
+  return true;
+}, {
+  message: 'BHK selection is required',
+  path: ['bhk'],
 })
 
 type PropertyFormData = z.infer<typeof propertySchema>
@@ -31,7 +50,11 @@ interface PropertyFormProps {
 }
 
 export default function PropertyForm({ initialData, onSubmit, isSubmitting }: PropertyFormProps) {
-  const { previews, addImages, removeImage, getFiles, canAddMore } = useImageUpload(7)
+  const [existingImages, setExistingImages] = useState(initialData?.images || [])
+  const [removedImagePublicIds, setRemovedImagePublicIds] = useState<string[]>([])
+
+  const { previews, addImages, removeImage, getFiles } = useImageUpload(7 - existingImages.length)
+  const canAddMore = (existingImages.length + previews.length) < 7
 
   const { register, handleSubmit, watch, formState: { errors } } = useForm<PropertyFormData>({
     resolver: zodResolver(propertySchema),
@@ -57,12 +80,18 @@ export default function PropertyForm({ initialData, onSubmit, isSubmitting }: Pr
   const propertyType = watch('propertyType')
   const showBhk = propertyType === 'house' || propertyType === 'flat'
 
+  const handleRemoveExistingImage = (publicId: string) => {
+    setExistingImages((prev) => prev.filter((img) => img.cloudinaryPublicId !== publicId))
+    setRemovedImagePublicIds((prev) => [...prev, publicId])
+  }
+
   const handleFormSubmit = async (data: PropertyFormData) => {
     const fd = new FormData()
     Object.entries(data).forEach(([key, value]) => {
       if (value !== undefined && value !== '') fd.append(key, value)
     })
     getFiles().forEach((file) => fd.append('images', file))
+    removedImagePublicIds.forEach((id) => fd.append('removeImages', id))
     await onSubmit(fd)
   }
 
@@ -113,11 +142,13 @@ export default function PropertyForm({ initialData, onSubmit, isSubmitting }: Pr
                 <option value="">Select BHK</option>
                 {[1,2,3,4,5].map(n => <option key={n} value={n}>{n} BHK</option>)}
               </select>
+              {errors.bhk && <p className="text-red-500 text-xs mt-1">{errors.bhk.message}</p>}
             </div>
           )}
           <div>
-            <Label>Area (sq.ft)</Label>
+            <Label>Area (sq.ft) *</Label>
             <Input type="number" placeholder="e.g. 1200" {...register('areaSqft')} className="mt-1" />
+            {errors.areaSqft && <p className="text-red-500 text-xs mt-1">{errors.areaSqft.message}</p>}
           </div>
         </div>
 
@@ -161,31 +192,62 @@ export default function PropertyForm({ initialData, onSubmit, isSubmitting }: Pr
       {/* Images */}
       <div className="space-y-3">
         <h3 className="text-lg font-semibold text-slate-900">Property Images</h3>
-        {previews.length > 0 && (
+        {(existingImages.length > 0 || previews.length > 0) && (
           <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
+            {/* Existing Images */}
+            {existingImages.map((img) => (
+              <div key={img.cloudinaryPublicId} className="relative aspect-video rounded-lg overflow-hidden bg-slate-100 group">
+                <img src={img.imageUrl} alt="" className="w-full h-full object-cover" />
+                <button
+                  type="button"
+                  disabled={isSubmitting}
+                  onClick={() => handleRemoveExistingImage(img.cloudinaryPublicId)}
+                  className={`absolute top-1 right-1 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center transition-opacity ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'opacity-0 group-hover:opacity-100'}`}
+                  title="Remove image"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+                {img.isPrimary && <span className="absolute bottom-1 left-1 text-[10px] bg-black/50 text-white px-1.5 py-0.5 rounded">Primary</span>}
+              </div>
+            ))}
+
+            {/* New Previews */}
             {previews.map((p, i) => (
               <div key={i} className="relative aspect-video rounded-lg overflow-hidden bg-slate-100 group">
                 <img src={p.preview} alt="" className="w-full h-full object-cover" />
                 <button
                   type="button"
+                  disabled={isSubmitting}
                   onClick={() => removeImage(i)}
-                  className="absolute top-1 right-1 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                  className={`absolute top-1 right-1 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center transition-opacity ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'opacity-0 group-hover:opacity-100'}`}
+                  title="Remove preview image"
                 >
                   <X className="w-3 h-3" />
                 </button>
-                {i === 0 && <span className="absolute bottom-1 left-1 text-[10px] bg-black/50 text-white px-1.5 py-0.5 rounded">Primary</span>}
+                {existingImages.length === 0 && i === 0 && (
+                  <span className="absolute bottom-1 left-1 text-[10px] bg-black/50 text-white px-1.5 py-0.5 rounded">Primary</span>
+                )}
               </div>
             ))}
           </div>
         )}
         {canAddMore && (
-          <label className="flex items-center justify-center gap-2 p-8 border-2 border-dashed border-slate-200 rounded-xl cursor-pointer hover:border-slate-300 hover:bg-slate-50 transition-all">
+          <label className={`flex items-center justify-center gap-2 p-8 border-2 border-dashed border-slate-200 rounded-xl transition-all ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:border-slate-300 hover:bg-slate-50'}`}>
             <Upload className="w-5 h-5 text-slate-400" />
             <span className="text-sm text-slate-500">Click to upload images</span>
-            <input type="file" multiple accept="image/*" className="hidden" onChange={(e) => addImages(e.target.files)} />
+            {!isSubmitting && (
+              <input type="file" multiple accept="image/*" className="hidden" onChange={(e) => addImages(e.target.files)} />
+            )}
           </label>
         )}
       </div>
+
+      {isSubmitting && (
+        <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 flex items-center gap-2.5 text-slate-600 text-sm">
+          <Loader2 className="w-4 h-4 animate-spin text-slate-500" />
+          <span>Uploading property details and images to cloud storage. Please do not close this page...</span>
+        </div>
+      )}
 
       <Button type="submit" className="w-full" size="lg" disabled={isSubmitting}>
         {isSubmitting && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}

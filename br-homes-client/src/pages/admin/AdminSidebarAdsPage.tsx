@@ -3,13 +3,15 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import api from '@/lib/axios'
 import { Button } from '@/components/ui/button'
 import LoadingSkeleton from '@/components/common/LoadingSkeleton'
-import { Trash, Upload, Film, AlertCircle } from 'lucide-react'
+import { Trash, Upload, Film, AlertCircle, Loader2 } from 'lucide-react'
 import { toast } from 'react-hot-toast'
+import ConfirmationModal from '@/components/common/ConfirmationModal'
 
 export default function AdminSidebarAdsPage() {
   const qc = useQueryClient()
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const [uploadProgress, setUploadProgress] = useState(false)
+  const [deleteId, setDeleteId] = useState<string | null>(null)
 
   const { data, isLoading } = useQuery({
     queryKey: ['sidebar', 'ads'],
@@ -142,13 +144,18 @@ export default function AdminSidebarAdsPage() {
                 muted
                 preload="metadata"
               />
-              <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+               <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
                 <button
-                  onClick={() => delMut.mutate(vid._id)}
-                  className="bg-white/90 backdrop-blur-sm p-2 rounded-lg shadow-lg hover:bg-red-50 transition-colors"
+                  disabled={delMut.isPending}
+                  onClick={() => setDeleteId(vid._id)}
+                  className="bg-white/90 backdrop-blur-sm p-2 rounded-lg shadow-lg hover:bg-red-50 transition-colors disabled:opacity-50"
                   title="Delete video"
                 >
-                  <Trash className="w-4 h-4 text-red-600" />
+                  {delMut.isPending && delMut.variables === vid._id ? (
+                    <Loader2 className="w-4 h-4 animate-spin text-red-600" />
+                  ) : (
+                    <Trash className="w-4 h-4 text-red-600" />
+                  )}
                 </button>
               </div>
               <div className="px-3 py-2 border-t border-slate-100">
@@ -164,6 +171,22 @@ export default function AdminSidebarAdsPage() {
           ))}
         </div>
       )}
+
+      <ConfirmationModal
+        isOpen={deleteId !== null}
+        onClose={() => setDeleteId(null)}
+        onConfirm={() => {
+          if (deleteId) {
+            delMut.mutate(deleteId, {
+              onSuccess: () => setDeleteId(null)
+            })
+          }
+        }}
+        title="Delete Ad Video"
+        message="Are you sure you want to delete this ad video? This action cannot be undone."
+        confirmText="Delete"
+        isPending={delMut.isPending}
+      />
     </div>
   )
 }

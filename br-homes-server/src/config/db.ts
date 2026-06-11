@@ -1,5 +1,9 @@
 import mongoose from 'mongoose'
+import dns from 'node:dns'
 import { env } from './env'
+
+// Force Node.js to use Google DNS for SRV lookups (fixes issues with some ISPs/VPNs)
+dns.setServers(['8.8.8.8', '8.8.4.4'])
 
 const MAX_RETRIES = 5
 const RETRY_DELAY_MS = 5000

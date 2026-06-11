@@ -67,10 +67,14 @@ export default function SettingsPage() {
                 value={newLimit}
                 onChange={(e) => setNewLimit(e.target.value)}
               />
+              {newLimit && (parseInt(newLimit) < 1 || parseInt(newLimit) > 20) && (
+                <p className="text-red-500 text-xs mt-1">Image limit must be between 1 and 20</p>
+              )}
             </div>
             <Button
               onClick={() => updateMutation.mutate(parseInt(newLimit))}
               disabled={!newLimit || parseInt(newLimit) < 1 || parseInt(newLimit) > 20 || updateMutation.isPending}
+              className="self-start"
             >
               {updateMutation.isPending ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
               Save

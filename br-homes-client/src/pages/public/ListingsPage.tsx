@@ -116,14 +116,24 @@ export default function ListingsPage() {
               type="number"
               placeholder="Min Price (₹)"
               value={filters.minPrice}
-              onChange={(e) => filters.setFilter('minPrice', e.target.value)}
+              onChange={(e) => {
+                const val = e.target.value
+                if (val === '' || Number(val) >= 0) {
+                  filters.setFilter('minPrice', val)
+                }
+              }}
               className="max-w-[180px]"
             />
             <Input
               type="number"
               placeholder="Max Price (₹)"
               value={filters.maxPrice}
-              onChange={(e) => filters.setFilter('maxPrice', e.target.value)}
+              onChange={(e) => {
+                const val = e.target.value
+                if (val === '' || Number(val) >= 0) {
+                  filters.setFilter('maxPrice', val)
+                }
+              }}
               className="max-w-[180px]"
             />
           </div>
