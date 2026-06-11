@@ -13,9 +13,8 @@ server/.env
 client/.env
 
 # Production Build Directories
-client/build/
-client/dist/
-server/dist/
+
+dist/
 
 # Debug logs
 npm-debug.log*
@@ -26,3 +25,6 @@ eslint-debug.log*
 # Operating System Files
 .DS_Store
 Thumbs.db
+
+dist/
+

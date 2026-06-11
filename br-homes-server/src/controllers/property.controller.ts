@@ -29,7 +29,7 @@ export const getProperties = asyncHandler(async (req: Request, res: Response) =>
     search,
   } = req.query
 
-  // Build filter query — only show approved properties to public
+  // Build filter query - only show approved properties to public
   const filter: Record<string, any> = { status: 'approved' }
 
   if (city && typeof city === 'string') filter.city = new RegExp(city, 'i')

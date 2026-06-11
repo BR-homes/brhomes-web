@@ -22,6 +22,7 @@ api.interceptors.response.use(
     const code = error.response?.data?.error?.code
 
     if (code === 'AUTH_REQUIRED') {
+      useAuthStore.getState().logout()
       // Only redirect if not already on auth pages
       if (!window.location.pathname.startsWith('/login') &&
           !window.location.pathname.startsWith('/register')) {

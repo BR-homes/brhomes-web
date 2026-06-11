@@ -130,7 +130,7 @@ export const googleLogin = asyncHandler(async (req: Request, res: Response) => {
 
 /**
  * POST /api/auth/register
- * Email registration — creates user with hashed password, sends verification email
+ * Email registration - creates user with hashed password, sends verification email
  */
 export const register = asyncHandler(async (req: Request, res: Response) => {
   const parsed = registerSchema.safeParse(req.body)
@@ -180,7 +180,7 @@ export const register = asyncHandler(async (req: Request, res: Response) => {
     await sendVerificationEmail(email, name, rawToken)
   } catch (error) {
     console.error('Failed to send verification email:', error)
-    // Don't fail registration if email fails — user can resend
+    // Don't fail registration if email fails - user can resend
   }
 
   sendSuccess(
@@ -359,3 +359,12 @@ export const getMe = asyncHandler(async (req: Request, res: Response) => {
 
   sendSuccess(res, 'User profile retrieved', user)
 })
+
+/**
+ * POST /api/auth/signout
+ * Signout user
+ */
+export const signout = asyncHandler(async (req: Request, res: Response) => {
+  sendSuccess(res, 'Logout successful', null)
+})
+

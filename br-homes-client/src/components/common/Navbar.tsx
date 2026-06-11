@@ -6,7 +6,7 @@ import { useUIStore } from '@/store/uiStore'
 import api from '@/lib/axios'
 
 export default function Navbar() {
-  const { user, isAuthenticated, clearUser } = useAuthStore()
+  const { user, isAuthenticated, logout } = useAuthStore()
   const { isMobileMenuOpen, toggleMobileMenu, closeMobileMenu } = useUIStore()
   const navigate = useNavigate()
 
@@ -16,7 +16,7 @@ export default function Navbar() {
     } catch {
       // Proceed with logout even if server call fails
     }
-    clearUser()
+    logout()
     closeMobileMenu()
     navigate('/login')
   }

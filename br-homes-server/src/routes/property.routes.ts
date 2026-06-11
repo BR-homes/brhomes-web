@@ -17,7 +17,7 @@ import {
 
 const router = Router()
 
-// Multer config — memory storage, 5MB limit, max 10 files
+// Multer config - memory storage, 5MB limit, max 10 files
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 5 * 1024 * 1024, files: 10 },

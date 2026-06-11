@@ -13,9 +13,8 @@ server/.env
 client/.env
 
 # Production Build Directories
-client/build/
-client/dist/
-server/dist/
+br-homes-client/build/
+br-homes-client/dist/
 
 # Debug logs
 npm-debug.log*

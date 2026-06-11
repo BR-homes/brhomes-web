@@ -55,7 +55,7 @@ const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 
 router.post('/sliders', upload.array('images', 10), uploadSliderImages)
 router.delete('/sliders/:id', deleteSliderImage)
 
-// Sidebar ads (admin) — videos up to 50MB each
+// Sidebar ads (admin) - videos up to 50MB each
 const videoUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 50 * 1024 * 1024 } })
 router.post('/sidebar-ads', videoUpload.array('videos', 10), uploadSidebarAds)
 router.delete('/sidebar-ads/:id', deleteSidebarAd)

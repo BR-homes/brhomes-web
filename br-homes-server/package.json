@@ -1,7 +1,7 @@
 {
   "name": "br-homes-server",
   "version": "1.0.0",
-  "description": "BR-Homes — No-broker real estate marketplace API",
+  "description": "BR-Homes - No-broker real estate marketplace API",
   "main": "dist/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",

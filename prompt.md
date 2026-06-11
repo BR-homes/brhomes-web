@@ -1,4 +1,4 @@
-# BR-Homes — Complete AI Development Prompt
+# BR-Homes - Complete AI Development Prompt
 
 > Paste this entire file into Cursor, Windsurf, Claude Code, or any AI coding assistant to scaffold and build the BR-Homes platform from scratch.
 
@@ -9,7 +9,7 @@
 **BR-Homes** is a no-broker real estate marketplace for **Amreli, Gujarat** and nearby areas.
 
 - Property owners list **houses, flats, shops, and land** for **sale or rent**
-- Buyers browse freely; the owner's **phone number is shown directly** on the listing — no messaging, no middleman
+- Buyers browse freely; the owner's **phone number is shown directly** on the listing - no messaging, no middleman
 - **Admin approves owners** (before they can post) **and properties** (before they go live)
 - Goal: save commission costs, connect buyers directly with owners
 
@@ -17,16 +17,16 @@
 
 ## 2. Core Principles
 
-1. **No brokers** — direct owner-to-buyer contact via phone number shown on listing
-2. **Minimal UI** — clean, not overwhelming; only essential shadcn/ui components
-3. **Mobile-first** — fully responsive, works perfectly on small screens
-4. **TypeScript everywhere** — strict mode, both frontend and backend
-5. **Developer-friendly** — standardized responses, error handling, clean structure
-6. **Performance** — TanStack Query caching, skeleton loaders, image lazy loading
+1. **No brokers** - direct owner-to-buyer contact via phone number shown on listing
+2. **Minimal UI** - clean, not overwhelming; only essential shadcn/ui components
+3. **Mobile-first** - fully responsive, works perfectly on small screens
+4. **TypeScript everywhere** - strict mode, both frontend and backend
+5. **Developer-friendly** - standardized responses, error handling, clean structure
+6. **Performance** - TanStack Query caching, skeleton loaders, image lazy loading
 
 ---
 
-## 3. Architecture Diagrams (Eraser — TODO: export and embed)
+## 3. Architecture Diagrams (Eraser - TODO: export and embed)
 
 - [ ] System Architecture → https://app.eraser.io/workspace/hEvyXUtFuntoNQwjy3Mz
 - [ ] Database Schema (MongoDB) → https://app.eraser.io/workspace/ACIJ0U6jQYs17am3kpQ8
@@ -86,7 +86,7 @@
 
 ## 5. Folder Structure
 
-### Frontend — `br-homes-client/`
+### Frontend - `br-homes-client/`
 
 ```
 br-homes-client/
@@ -95,7 +95,7 @@ br-homes-client/
 ├── src/
 │   ├── assets/                       # static images, logo
 │   ├── components/
-│   │   ├── ui/                       # shadcn/ui auto-generated — do not edit
+│   │   ├── ui/                       # shadcn/ui auto-generated - do not edit
 │   │   ├── common/
 │   │   │   ├── Navbar.tsx            # top nav with role-aware links
 │   │   │   ├── Footer.tsx
@@ -168,7 +168,7 @@ br-homes-client/
 └── package.json
 ```
 
-### Backend — `br-homes-server/`
+### Backend - `br-homes-server/`
 
 ```
 br-homes-server/
@@ -177,7 +177,7 @@ br-homes-server/
 │   │   ├── db.ts                     # Mongoose connect to MongoDB Atlas
 │   │   ├── cloudinary.ts             # Cloudinary v2 SDK config
 │   │   ├── auth.ts                   # Auth.js config (providers, callbacks, adapter)
-│   │   └── env.ts                    # Zod env validation — throws on missing vars
+│   │   └── env.ts                    # Zod env validation - throws on missing vars
 │   ├── models/
 │   │   ├── User.model.ts             # Extended Auth.js user schema
 │   │   ├── Account.model.ts          # Auth.js OAuth accounts (Google only)
@@ -200,16 +200,16 @@ br-homes-server/
 │   │   ├── saved.controller.ts
 │   │   └── admin.controller.ts
 │   ├── middleware/
-│   │   ├── sessionGuard.ts           # verify Auth.js session — 401 if missing
-│   │   ├── roleGuard.ts              # check user.role — 403 if wrong
-│   │   ├── ownerApprovedGuard.ts     # check ownerApproved — 403 if false
+│   │   ├── sessionGuard.ts           # verify Auth.js session - 401 if missing
+│   │   ├── roleGuard.ts              # check user.role - 403 if wrong
+│   │   ├── ownerApprovedGuard.ts     # check ownerApproved - 403 if false
 │   │   ├── imageLimitGuard.ts        # resolve + check image limit
 │   │   └── errorMiddleware.ts        # global Express error handler
 │   ├── utils/
-│   │   ├── asyncHandler.ts           # wraps async controllers — auto catches
+│   │   ├── asyncHandler.ts           # wraps async controllers - auto catches
 │   │   ├── AppError.ts               # custom error (statusCode, code, message)
 │   │   ├── responseHandler.ts        # sendSuccess() + sendError() helpers
-│   │   ├── email.ts                  # Resend — send verification emails
+│   │   ├── email.ts                  # Resend - send verification emails
 │   │   ├── cloudinaryUtils.ts        # uploadImage() + deleteImage() helpers
 │   │   └── tokenUtils.ts             # generate + hash verification tokens
 │   ├── validations/                  # Zod request body schemas
@@ -235,7 +235,7 @@ br-homes-server/
 
 ### `users` collection
 ```typescript
-// Extended Auth.js user model — custom fields added
+// Extended Auth.js user model - custom fields added
 {
   _id: ObjectId,
   name: string,                  // required
@@ -260,7 +260,7 @@ br-homes-server/
 // isActive: 1
 ```
 
-### `accounts` collection (Auth.js — auto-managed)
+### `accounts` collection (Auth.js - auto-managed)
 ```typescript
 // IMPORTANT: Only Google OAuth users get an entry here.
 // Email/password users do NOT have an accounts document.
@@ -282,17 +282,17 @@ br-homes-server/
 // Compound unique index: provider + providerAccountId
 ```
 
-### `sessions` collection (Auth.js — auto-managed)
+### `sessions` collection (Auth.js - auto-managed)
 ```typescript
 {
   _id: ObjectId,
   sessionToken: string,          // unique; indexed with TTL
   userId: ObjectId,              // ref: users
-  expires: Date,                 // TTL index — auto-deleted when expired
+  expires: Date,                 // TTL index - auto-deleted when expired
 }
 ```
 
-### `emailVerifications` collection (custom — NOT Auth.js)
+### `emailVerifications` collection (custom - NOT Auth.js)
 ```typescript
 // ⚠️ This is OUR custom collection for email verification.
 // Auth.js MongoDB adapter uses its own `verification_tokens` collection (snake_case)
@@ -301,13 +301,13 @@ br-homes-server/
   _id: ObjectId,
   email: string,                 // user's email address
   token: string,                 // raw token sent in email link (NOT stored)
-  hashedToken: string,           // SHA-256 hash of token — stored in DB
+  hashedToken: string,           // SHA-256 hash of token - stored in DB
   expires: Date,                 // 24 hours from creation
   createdAt: Date,
 }
 
 // Index: token (unique), email
-// Never store the raw token — always hash before saving, compare hashes
+// Never store the raw token - always hash before saving, compare hashes
 ```
 
 ### `properties` collection
@@ -328,9 +328,9 @@ br-homes-server/
   contactPhone: string,          // shown directly to all visitors on detail page
   status: 'pending' | 'approved' | 'rejected' | 'hidden' | 'sold' | 'rented',
   rejectionNote: string | null,  // set by admin on reject; shown to owner
-  images: Array<{                // embedded — max count = effective imageLimit
+  images: Array<{                // embedded - max count = effective imageLimit
     imageUrl: string,            // Cloudinary secure_url
-    cloudinaryPublicId: string,  // MUST store — used to delete from Cloudinary
+    cloudinaryPublicId: string,  // MUST store - used to delete from Cloudinary
     isPrimary: boolean,          // first image = true (shown in listing cards)
   }>,
   // ⚠️ Do NOT use nested `{ }` blocks for embedded arrays in Eraser ERD DSL
@@ -380,10 +380,10 @@ br-homes-server/
 
 ### `settings` collection
 ```typescript
-// Platform-wide configuration — seeded on first server start
+// Platform-wide configuration - seeded on first server start
 {
   _id: ObjectId,
-  key: string,                   // unique — e.g. 'globalImageLimit'
+  key: string,                   // unique - e.g. 'globalImageLimit'
   value: any,                    // Mixed type
   updatedBy: ObjectId,           // ref: users (admin who last changed)
   updatedAt: Date,
@@ -475,7 +475,7 @@ interface ErrorResponse {
   success: false
   message: string    // human-readable description
   error: {
-    code: string     // machine-readable — use from list below
+    code: string     // machine-readable - use from list below
     details?: any    // Zod validation errors, etc.
   }
 }
@@ -499,7 +499,7 @@ interface ErrorResponse {
 
 ---
 
-## 9. Utility Files (Backend — implement exactly as below)
+## 9. Utility Files (Backend - implement exactly as below)
 
 ### `utils/asyncHandler.ts`
 ```typescript
@@ -641,8 +641,8 @@ export const sendVerificationEmail = async (
 ### Auth Routes
 | Method | Path | Access | Description |
 |--------|------|--------|-------------|
-| GET | `/api/auth/signin/google` | Public | Google OAuth — handled by Auth.js |
-| POST | `/api/auth/signin` | Public | Email login — handled by Auth.js |
+| GET | `/api/auth/signin/google` | Public | Google OAuth - handled by Auth.js |
+| POST | `/api/auth/signin` | Public | Email login - handled by Auth.js |
 | POST | `/api/auth/signout` | Session | Sign out |
 | GET | `/api/auth/session` | Any | Get current session |
 | POST | `/api/auth/register` | Public | Email registration + send verify email |
@@ -829,7 +829,7 @@ export const queryKeys = {
 
 ## 13. TypeScript Types
 
-### `types/index.ts` (shared — use in both frontend and backend)
+### `types/index.ts` (shared - use in both frontend and backend)
 ```typescript
 export interface IUser {
   _id: string
@@ -892,10 +892,10 @@ export interface IApiResponse<T> {
 ## 14. UI/UX Guidelines
 
 ### Design Principles
-- **Minimal** — white space is intentional; no visual clutter
-- **Mobile-first** — design for 375px width first, then tablet (768px), then desktop (1280px)
-- **Fast** — skeleton loaders on every list/detail, lazy-load images, TanStack Query caching
-- **Accessible** — aria-label on icon buttons, proper heading hierarchy, sufficient color contrast
+- **Minimal** - white space is intentional; no visual clutter
+- **Mobile-first** - design for 375px width first, then tablet (768px), then desktop (1280px)
+- **Fast** - skeleton loaders on every list/detail, lazy-load images, TanStack Query caching
+- **Accessible** - aria-label on icon buttons, proper heading hierarchy, sufficient color contrast
 
 ### Color Palette (Tailwind classes)
 | Use | Class |
@@ -910,7 +910,7 @@ export interface IApiResponse<T> {
 | Border | `slate-200` |
 | Price text | `slate-900 font-semibold` |
 
-### shadcn/ui — Install Only These Components
+### shadcn/ui - Install Only These Components
 ```bash
 npx shadcn@latest init
 npx shadcn@latest add button input card badge dialog select skeleton sonner
@@ -950,12 +950,12 @@ npx shadcn@latest add button input card badge dialog select skeleton sonner
 
 ## 15. Environment Variables
 
-### Frontend — `.env`
+### Frontend - `.env`
 ```env
 VITE_API_URL=http://localhost:5000
 ```
 
-### Backend — `.env`
+### Backend - `.env`
 ```env
 # Server
 PORT=5000
@@ -978,7 +978,7 @@ CLOUDINARY_CLOUD_NAME=your_cloud_name
 CLOUDINARY_API_KEY=your_api_key
 CLOUDINARY_API_SECRET=your_api_secret
 
-# Resend (resend.com — free tier)
+# Resend (resend.com - free tier)
 RESEND_API_KEY=re_xxxxxxxxxxxx
 RESEND_FROM_EMAIL=noreply@yourdomain.com
 ```
@@ -988,18 +988,18 @@ RESEND_FROM_EMAIL=noreply@yourdomain.com
 ## 16. Key Business Rules
 
 1. **Owner must be admin-approved** before they can post any property
-2. **Every property** starts as `pending` — admin must approve before it's visible to public
+2. **Every property** starts as `pending` - admin must approve before it's visible to public
 3. **Email users** must verify their email before they can sign in
 4. **Google users** must complete their profile (role + phone) on first sign-in
-5. **Owner phone** (`contactPhone`) is shown to all visitors on property detail — no DM system
+5. **Owner phone** (`contactPhone`) is shown to all visitors on property detail - no DM system
 6. **Image limit** resolution order: `user.imageLimit ?? settings.globalImageLimit ?? 7`
-7. **Admin account** is created directly in MongoDB — no public registration path for admin
+7. **Admin account** is created directly in MongoDB - no public registration path for admin
 8. **Buyers** can only save properties (login required); no other actions
-9. **Rejected property** stores `rejectionNote` on the property document — owner can see it
+9. **Rejected property** stores `rejectionNote` on the property document - owner can see it
 10. **Deleted property** MUST delete all images from Cloudinary using `cloudinaryPublicId` before removing DB record
-11. **Deactivated user** is blocked at `sessionGuard` — returns `ACCOUNT_DEACTIVATED`
+11. **Deactivated user** is blocked at `sessionGuard` - returns `ACCOUNT_DEACTIVATED`
 12. **`bhk` field** only applies to `house` and `flat`; must be `null` for `shop` and `land`
-13. **`savedProperties`** has a compound unique index — server returns `ALREADY_EXISTS` on duplicate save
+13. **`savedProperties`** has a compound unique index - server returns `ALREADY_EXISTS` on duplicate save
 14. **Admin is pre-created** in the database; the `ownerApproved` field is `true` by default for admin
 
 ---
@@ -1058,7 +1058,7 @@ npm run dev   # runs at http://localhost:5173
 ```bash
 cd br-homes-server
 npm install
-npm run dev   # tsx watch src/index.ts — runs at http://localhost:5000
+npm run dev   # tsx watch src/index.ts - runs at http://localhost:5000
 ```
 
 ### Backend `package.json` scripts
@@ -1076,7 +1076,7 @@ npm run dev   # tsx watch src/index.ts — runs at http://localhost:5000
 
 ## 19. Key Configuration Files
 
-### Backend — `tsconfig.json`
+### Backend - `tsconfig.json`
 ```json
 {
   "compilerOptions": {
@@ -1099,7 +1099,7 @@ npm run dev   # tsx watch src/index.ts — runs at http://localhost:5000
 }
 ```
 
-### Frontend — `tsconfig.json`
+### Frontend - `tsconfig.json`
 ```json
 {
   "compilerOptions": {
@@ -1128,7 +1128,7 @@ npm run dev   # tsx watch src/index.ts — runs at http://localhost:5000
 }
 ```
 
-### Frontend — `vite.config.ts`
+### Frontend - `vite.config.ts`
 ```typescript
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
@@ -1144,7 +1144,7 @@ export default defineConfig({
 })
 ```
 
-### Frontend — `tailwind.config.ts`
+### Frontend - `tailwind.config.ts`
 ```typescript
 import type { Config } from 'tailwindcss'
 
@@ -1172,7 +1172,7 @@ const config: Config = {
 export default config
 ```
 
-### Backend — `src/config/env.ts`
+### Backend - `src/config/env.ts`
 ```typescript
 import { z } from 'zod'
 
@@ -1193,7 +1193,7 @@ const envSchema = z.object({
 })
 
 export const env = envSchema.parse(process.env)
-// Throws on startup if any required var is missing — fail fast
+// Throws on startup if any required var is missing - fail fast
 ```
 
 ---
@@ -1211,7 +1211,7 @@ import bcrypt from 'bcryptjs'
 import User from '../models/User.model'
 import { env } from './env'
 
-// Cached config — set once after mongoose.connect() in index.ts
+// Cached config - set once after mongoose.connect() in index.ts
 let _authConfig: ReturnType<typeof buildAuthConfig> | null = null
 
 const buildAuthConfig = () => ({
@@ -1268,7 +1268,7 @@ const buildAuthConfig = () => ({
   pages: { signIn: '/login', error: '/login' },
 })
 
-// Call this ONCE after mongoose.connect() resolves — see index.ts
+// Call this ONCE after mongoose.connect() resolves - see index.ts
 export const initAuthConfig = () => {
   _authConfig = buildAuthConfig()
   return ExpressAuth(_authConfig)   // returns the Express middleware (authHandler)
@@ -1392,11 +1392,11 @@ app.use(express.urlencoded({ extended: true }))
 if (env.NODE_ENV === 'development') app.use(morgan('dev'))
 
 const start = async () => {
-  // 1. Connect DB first — adapter needs live MongoClient
+  // 1. Connect DB first - adapter needs live MongoClient
   await mongoose.connect(env.MONGODB_URI)
   console.log('✅ MongoDB connected')
 
-  // 2. Init Auth.js AFTER DB is connected — returns Express middleware
+  // 2. Init Auth.js AFTER DB is connected - returns Express middleware
   const authHandler = initAuthConfig()
   app.use('/api/auth', authHandler)            // Auth.js built-in routes
 
@@ -1407,7 +1407,7 @@ const start = async () => {
   app.use('/api/saved', savedRoutes)
   app.use('/api/admin', adminRoutes)
 
-  // 4. Global error handler — always last
+  // 4. Global error handler - always last
   app.use(errorMiddleware)
 
   // 5. Seed default settings
@@ -1444,7 +1444,7 @@ import axios from 'axios'
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
-  withCredentials: true,  // CRITICAL — sends Auth.js session cookie
+  withCredentials: true,  // CRITICAL - sends Auth.js session cookie
   headers: { 'Content-Type': 'application/json' },
 })
 
@@ -1553,7 +1553,7 @@ export default function ProtectedRoute({
 }
 ```
 
-### `src/App.tsx` — session bootstrap on load
+### `src/App.tsx` - session bootstrap on load
 ```typescript
 import { useEffect } from 'react'
 import { useAuthStore } from '@/store/authStore'
@@ -1587,7 +1587,7 @@ export default function App() {
 
 ## 22. Image Upload Implementation
 
-### Backend — `src/utils/cloudinaryUtils.ts`
+### Backend - `src/utils/cloudinaryUtils.ts`
 ```typescript
 import { v2 as cloudinary } from 'cloudinary'
 import { env } from '../config/env'
@@ -1625,7 +1625,7 @@ export const deleteImages = async (publicIds: string[]): Promise<void> => {
 }
 ```
 
-### Backend — `src/middleware/imageLimitGuard.ts`
+### Backend - `src/middleware/imageLimitGuard.ts`
 ```typescript
 import { Request, Response, NextFunction } from 'express'
 import User from '../models/User.model'
@@ -1780,13 +1780,13 @@ export default mongoose.model('SavedProperty', SavedPropertySchema)
 
 ### `src/models/EmailVerification.model.ts`
 ```typescript
-// ⚠️ This is OUR custom collection — separate from Auth.js's verification_tokens
+// ⚠️ This is OUR custom collection - separate from Auth.js's verification_tokens
 import mongoose, { Schema, Document } from 'mongoose'
 
 export interface IEmailVerification extends Document {
   email: string
-  token: string          // unique raw token (NOT stored — only for index)
-  hashedToken: string    // SHA-256 hash — what's stored and compared
+  token: string          // unique raw token (NOT stored - only for index)
+  hashedToken: string    // SHA-256 hash - what's stored and compared
   expires: Date
   createdAt: Date
 }
@@ -1801,7 +1801,7 @@ const EmailVerificationSchema = new Schema<IEmailVerification>(
   { timestamps: { createdAt: true, updatedAt: false } }
 )
 
-// TTL index — MongoDB auto-deletes expired records
+// TTL index - MongoDB auto-deletes expired records
 EmailVerificationSchema.index({ expires: 1 }, { expireAfterSeconds: 0 })
 
 export default mongoose.model<IEmailVerification>('EmailVerification', EmailVerificationSchema)
@@ -1813,9 +1813,9 @@ import crypto from 'crypto'
 import EmailVerification from '../models/EmailVerification.model'
 
 export const generateVerificationToken = async (email: string): Promise<string> => {
-  // Generate raw token — sent in email link
+  // Generate raw token - sent in email link
   const rawToken = crypto.randomBytes(32).toString('hex')
-  // Hash it — only hash goes into DB (prevents DB leak = token theft)
+  // Hash it - only hash goes into DB (prevents DB leak = token theft)
   const hashedToken = crypto.createHash('sha256').update(rawToken).digest('hex')
 
   // Remove any existing token for this email first
@@ -1828,7 +1828,7 @@ export const generateVerificationToken = async (email: string): Promise<string> 
     expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
   })
 
-  return rawToken   // return RAW — sent in email URL
+  return rawToken   // return RAW - sent in email URL
 }
 
 export const verifyEmailToken = async (rawToken: string): Promise<string | null> => {
@@ -1842,7 +1842,7 @@ export const verifyEmailToken = async (rawToken: string): Promise<string | null>
   if (!record) return null
 
   const email = record.email
-  await record.deleteOne()   // one-time use — delete after success
+  await record.deleteOne()   // one-time use - delete after success
 
   return email
 }
@@ -1852,14 +1852,14 @@ export const verifyEmailToken = async (rawToken: string): Promise<string | null>
 
 ## 24. Important Implementation Notes
 
-1. **`withCredentials: true`** must be set on Axios — without it, Auth.js session cookies won't be sent cross-origin.
+1. **`withCredentials: true`** must be set on Axios - without it, Auth.js session cookies won't be sent cross-origin.
 
 2. **CORS `credentials: true`** must be set on Express, and `origin` must be the **exact** frontend URL (not `*`). Using `*` with credentials will throw a browser CORS error.
 
 3. **Auth.js init order** in `index.ts`:
-   - Step 1: `await mongoose.connect()` — DB must be open
-   - Step 2: `const authHandler = initAuthConfig()` — creates adapter using live MongoClient
-   - Step 3: `app.use('/api/auth', authHandler)` — mount Auth.js routes
+   - Step 1: `await mongoose.connect()` - DB must be open
+   - Step 2: `const authHandler = initAuthConfig()` - creates adapter using live MongoClient
+   - Step 3: `app.use('/api/auth', authHandler)` - mount Auth.js routes
    - Never call `initAuthConfig()` at module load time (before DB connects)
 
 4. **Auth.js collection names** (managed automatically by `@auth/mongodb-adapter`):
@@ -1867,17 +1867,17 @@ export const verifyEmailToken = async (rawToken: string): Promise<string | null>
    - Our custom email verification uses `emailverifications` (Mongoose model `EmailVerification`)
    - These never conflict
 
-5. **Email verification token** — never store the raw token. Store only the SHA-256 hash. Send the raw token in the email link. On verify, hash the incoming token and compare hashes in DB.
+5. **Email verification token** - never store the raw token. Store only the SHA-256 hash. Send the raw token in the email link. On verify, hash the incoming token and compare hashes in DB.
 
 6. **Google OAuth redirect URI** must exactly match what's registered in Google Cloud Console:
    - Dev: `http://localhost:5000/api/auth/callback/google`
    - Prod: `https://your-railway-url.railway.app/api/auth/callback/google`
 
-7. **Multer memory storage** stores files as `Buffer` in `req.files`. Pass the buffer directly to Cloudinary's upload stream — never write to disk (Railway is ephemeral).
+7. **Multer memory storage** stores files as `Buffer` in `req.files`. Pass the buffer directly to Cloudinary's upload stream - never write to disk (Railway is ephemeral).
 
 8. **`bcrypt` rounds**: Use 10 rounds (`bcrypt.hash(password, 10)`). Never store plain text passwords.
 
-9. **Admin user creation** — run this once in MongoDB Atlas Query editor:
+9. **Admin user creation** - run this once in MongoDB Atlas Query editor:
    ```javascript
    // First generate bcrypt hash using: node -e "require('bcryptjs').hash('yourpassword',10).then(console.log)"
    db.users.insertOne({
@@ -1897,13 +1897,13 @@ export const verifyEmailToken = async (rawToken: string): Promise<string | null>
    })
    ```
 
-10. **TanStack Query invalidation** — after any mutation call `queryClient.invalidateQueries({ queryKey: queryKeys.xxx })` to automatically refetch fresh data.
+10. **TanStack Query invalidation** - after any mutation call `queryClient.invalidateQueries({ queryKey: queryKeys.xxx })` to automatically refetch fresh data.
 
-11. **`bhk` field** — always set to `null` on the server if `propertyType` is `shop` or `land`, regardless of what the client sends. Validate this in the Zod schema too.
+11. **`bhk` field** - always set to `null` on the server if `propertyType` is `shop` or `land`, regardless of what the client sends. Validate this in the Zod schema too.
 
-12. **`getAuthConfig()` in sessionGuard** — always calls the cached config, never rebuilds it. The config is built once in `initAuthConfig()` and reused for every request.
+12. **`getAuthConfig()` in sessionGuard** - always calls the cached config, never rebuilds it. The config is built once in `initAuthConfig()` and reused for every request.
 
-13. **Settings seed** — `seedSettings()` uses `$setOnInsert` with upsert, so it's safe to run on every server start. Only inserts if the key doesn't already exist.
+13. **Settings seed** - `seedSettings()` uses `$setOnInsert` with upsert, so it's safe to run on every server start. Only inserts if the key doesn't already exist.
 
 14. **Property deletion flow**:
     ```
@@ -1913,13 +1913,13 @@ export const verifyEmailToken = async (rawToken: string): Promise<string | null>
     4. If Cloudinary fails → return error, DO NOT delete from DB
     ```
 
-15. **Rejected properties** — store `rejectionNote` directly on the property document so the owner can read it in their dashboard without a separate query to adminActions.
+15. **Rejected properties** - store `rejectionNote` directly on the property document so the owner can read it in their dashboard without a separate query to adminActions.
 
-16. **Session callback performance** — the `session` callback queries MongoDB on every authenticated request. For a city-level startup with low traffic this is fine. At scale, cache the user fields in the session JWT instead.
+16. **Session callback performance** - the `session` callback queries MongoDB on every authenticated request. For a city-level startup with low traffic this is fine. At scale, cache the user fields in the session JWT instead.
 
 ---
 
-## 25. Eraser ERD — Manual Paste (Corrected DSL)
+## 25. Eraser ERD - Manual Paste (Corrected DSL)
 
 > Eraser's MCP hit its rate limit. Paste the DSL below manually into your Eraser ERD file.
 > Open https://app.eraser.io/workspace/ACIJ0U6jQYs17am3kpQ8 → click the diagram → press Ctrl+` (backtick) to open the code editor → replace all content with the DSL below → press Enter to render.
@@ -2037,8 +2037,8 @@ properties._id < adminActions.targetId
 ### What was fixed vs the broken version:
 | Problem | Fix |
 |---------|-----|
-| Floating `updatedAt`/`createdAt` boxes | Removed nested `{ }` block inside `images Array embedded` — caused parser to treat it as a new entity |
-| No connection lines between tables | Removed group wrappers (Auth.js Collections / App Collections) — groups block ERD relationship rendering in Eraser |
-| `verificationTokens` conflict | Renamed to `emailVerifications` — Auth.js adapter manages its own `verification_tokens` (snake_case) separately |
+| Floating `updatedAt`/`createdAt` boxes | Removed nested `{ }` block inside `images Array embedded` - caused parser to treat it as a new entity |
+| No connection lines between tables | Removed group wrappers (Auth.js Collections / App Collections) - groups block ERD relationship rendering in Eraser |
+| `verificationTokens` conflict | Renamed to `emailVerifications` - Auth.js adapter manages its own `verification_tokens` (snake_case) separately |
 | `settings` floating alone | Added `users._id < settings.updatedBy` relationship |
 | Embedded images | Represented as flat fields: `images_imageUrl`, `images_cloudinaryPublicId`, `images_isPrimary` |

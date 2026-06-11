@@ -37,7 +37,7 @@ export default function AuthLayout() {
         </div>
 
         <p className="text-center mt-6 text-xs text-slate-400">
-          © {new Date().getFullYear()} BR-Homes — No broker, no commission
+          © {new Date().getFullYear()} BR-Homes - No broker, no commission
         </p>
       </div>
     </div>

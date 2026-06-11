@@ -45,7 +45,7 @@ app.get('/api/health', (_req, res) => {
 const start = async () => {
   // 1. Connect to MongoDB
   await mongoose.connect(env.MONGODB_URI)
-  console.log('✅ MongoDB connected')
+  console.log('MongoDB connected')
 
   // 3. Register routes
   app.use('/api/auth', authRoutes)
@@ -56,7 +56,7 @@ const start = async () => {
   app.use('/api/sidebar-ads', sidebarAdRoutes)
   app.use('/api/admin', adminRoutes)
 
-  // 4. Global error handler — MUST be last
+  // 4. Global error handler - MUST be last
   app.use(errorMiddleware)
 
   // 5. Seed default settings
@@ -67,8 +67,8 @@ const start = async () => {
 
   // 7. Start server
   app.listen(Number.parseInt(env.PORT, 10), () => {
-    console.log(`🚀 Server running on http://localhost:${env.PORT}`)
-    console.log(`📦 Environment: ${env.NODE_ENV}`)
+    console.log(`Server running on http://localhost:${env.PORT}`)
+    console.log(`Environment: ${env.NODE_ENV}`)
   })
 }
 
@@ -87,18 +87,18 @@ const seedSettings = async () => {
     },
     { upsert: true, new: true }
   )
-  console.log('✅ Settings seeded')
+  console.log('Settings seeded')
 }
 
 /**
- * Seed admin user — creates or updates admin account
+ * Seed admin user - creates or updates admin account
  */
 const seedAdmin = async () => {
   const adminEmail = 'brhomes.app@gmail.com'
   const existingAdmin = await User.findOne({ email: adminEmail })
 
   if (existingAdmin) {
-    console.log('✅ Admin user already exists')
+    console.log('Admin user already exists')
     return
   }
 
@@ -115,11 +115,11 @@ const seedAdmin = async () => {
       emailVerified: new Date(),
       phone: '0000000000',
     })
-    // console.log('✅ Admin user created (brhomes.app@gmail.com / Admin@123)')
+    // console.log('Admin user created (brhomes.app@gmail.com / Admin@123)')
   }
 }
 
 start().catch((err) => {
-  console.error('❌ Failed to start server:', err)
+  console.error('Failed to start server:', err)
   process.exit(1)
 })

@@ -8,6 +8,7 @@ import {
   resendVerification,
   completeProfile,
   getMe,
+  signout,
 } from '../controllers/auth.controller'
 
 const router = Router()
@@ -18,9 +19,11 @@ router.post('/google', googleLogin)
 router.post('/register', register)
 router.get('/verify-email', verifyEmail)
 router.post('/resend-verification', resendVerification)
+router.post('/signout', signout)
 
 // Protected routes (require session)
 router.post('/complete-profile', sessionGuard, completeProfile)
 router.get('/me', sessionGuard, getMe)
 
 export default router
+

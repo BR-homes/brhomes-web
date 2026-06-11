@@ -16,7 +16,7 @@ export default function Footer() {
             </Link>
             <p className="text-sm text-slate-400 leading-relaxed max-w-xs">
               No-broker real estate marketplace for Amreli, Gujarat. 
-              Connect directly with property owners — zero commission.
+              Connect directly with property owners - zero commission.
             </p>
           </div>
 
@@ -52,7 +52,7 @@ export default function Footer() {
 
         <div className="mt-10 pt-8 border-t border-slate-800 text-center">
           <p className="text-xs text-slate-500">
-            © {new Date().getFullYear()} BR-Homes. All rights reserved. No broker commission — connect directly with owners.
+            © {new Date().getFullYear()} BR-Homes. All rights reserved. No broker commission - connect directly with owners.
           </p>
         </div>
       </div>

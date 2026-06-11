@@ -80,7 +80,7 @@ export default function RegisterPage() {
   return (
     <div>
       <h2 className="text-2xl font-bold text-slate-900 mb-1">Create your account</h2>
-      <p className="text-sm text-slate-500 mb-6">Join BR-Homes — list or find property commission-free</p>
+      <p className="text-sm text-slate-500 mb-6">Join BR-Homes - list or find property commission-free</p>
 
       {error && (
         <div className="bg-red-50 text-red-700 text-sm p-3 rounded-lg mb-4 border border-red-200">{error}</div>

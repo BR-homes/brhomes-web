@@ -139,7 +139,7 @@ export default function PropertyDetailPage() {
                 <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-2">{property.title}</h1>
                 <div className="flex items-center gap-1.5 text-slate-500">
                   <MapPin className="w-4 h-4" />
-                  <span>{property.areaLocality}, {property.city} — {property.pincode}</span>
+                  <span>{property.areaLocality}, {property.city} - {property.pincode}</span>
                 </div>
               </div>
 
@@ -206,7 +206,7 @@ export default function PropertyDetailPage() {
                   +91 {property.contactPhone}
                 </a>
                 <p className="text-xs text-slate-400 text-center mt-3 mb-6">
-                  Call the owner directly — no broker involved
+                  Call the owner directly - no broker involved
                 </p>
                 <SavePropertyButton propertyId={property._id} variant="full" />
               </div>

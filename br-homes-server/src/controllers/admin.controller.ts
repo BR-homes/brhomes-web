@@ -132,16 +132,16 @@ export const getPropertyApprovalQueue = asyncHandler(
       .sort({ approvalRequestedAt: 1, createdAt: 1 })
       .lean()
 
-    const items = pending.map((property, index) => ({
-      propertyId: property._id,
-      title: property.title,
-      ownerName:
-        typeof property.ownerId === 'object' && property.ownerId?.name
-          ? property.ownerId.name
-          : 'Unknown',
-      approvalRequestedAt: property.approvalRequestedAt || property.createdAt,
-      queuePosition: index + 1,
-    }))
+    const items = pending.map((property, index) => {
+      const owner = property.ownerId as any
+      return {
+        propertyId: property._id,
+        title: property.title,
+        ownerName: owner && typeof owner === 'object' && 'name' in owner ? owner.name : 'Unknown',
+        approvalRequestedAt: property.approvalRequestedAt || property.createdAt,
+        queuePosition: index + 1,
+      }
+    })
 
     sendSuccess(res, 'Approval queue retrieved', {
       totalPending: items.length,
