@@ -6,6 +6,7 @@ import morgan from 'morgan'
 import mongoose from 'mongoose'
 import bcrypt from 'bcryptjs'
 import { env } from './config/env'
+import { connectDB } from './config/db'
 import errorMiddleware from './middleware/errorMiddleware'
 import authRoutes from './routes/auth.routes'
 import propertyRoutes from './routes/property.routes'
@@ -44,8 +45,7 @@ app.get('/api/health', (_req, res) => {
 
 const start = async () => {
   // 1. Connect to MongoDB
-  await mongoose.connect(env.MONGODB_URI)
-  console.log('MongoDB connected')
+  await connectDB()
 
   // 3. Register routes
   app.use('/api/auth', authRoutes)

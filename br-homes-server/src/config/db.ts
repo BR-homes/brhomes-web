@@ -11,6 +11,11 @@ export async function connectDB(): Promise<void> {
     try {
       await mongoose.connect(env.MONGODB_URI, {
         dbName: 'br-homes',
+        serverApi: {
+          version: '1',
+          strict: true,
+          deprecationErrors: true,
+        }
       })
 
       console.log(`MongoDB connected: ${mongoose.connection.host}`)
