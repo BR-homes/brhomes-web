@@ -1,6 +1,19 @@
-import { QueryClient } from '@tanstack/react-query'
+import { QueryClient, QueryCache, MutationCache } from '@tanstack/react-query'
+import { toast } from 'react-hot-toast'
 
 export const queryClient = new QueryClient({
+  queryCache: new QueryCache({
+    onError: (error: any) => {
+      const message = error.response?.data?.message || error.message || 'Database or network error occurred.'
+      toast.error(`Database/API Error: ${message}`, { id: 'api-query-error' })
+    }
+  }),
+  mutationCache: new MutationCache({
+    onError: (error: any) => {
+      const message = error.response?.data?.message || error.message || 'Action failed.'
+      toast.error(`Operation Failed: ${message}`, { id: 'api-mutation-error' })
+    }
+  }),
   defaultOptions: {
     queries: {
       staleTime: 1000 * 60 * 5, // 5 minutes

@@ -1,0 +1,12 @@
+{
+  "name": "br-homes-monorepo",
+  "private": true,
+  "workspaces": [
+    "br-homes-client",
+    "br-homes-server"
+  ],
+  "scripts": {
+    "build:client": "npm run build --prefix br-homes-client",
+    "build:server": "npm run build --prefix br-homes-server"
+  }
+}
