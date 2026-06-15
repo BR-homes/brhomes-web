@@ -187,13 +187,13 @@ export default function PropertyDetailPage() {
             <div className="md:col-span-1">
               <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm sticky top-24">
                 <h3 className="text-lg font-semibold text-slate-900 mb-4">Contact Owner</h3>
-                {owner && (
+                {(property.customOwnerName || owner) && (
                   <div className="flex items-center gap-3 mb-5 pb-5 border-b border-slate-100">
                     <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center">
                       <User className="w-6 h-6 text-slate-500" />
                     </div>
                     <div>
-                      <p className="font-medium text-slate-900">{owner.name}</p>
+                      <p className="font-medium text-slate-900">{property.customOwnerName || owner?.name}</p>
                       <p className="text-sm text-slate-500">Property Owner</p>
                     </div>
                   </div>

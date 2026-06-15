@@ -27,6 +27,7 @@ export type PropertyStatus = 'pending' | 'approved' | 'rejected' | 'hidden' | 's
 export interface IProperty {
   _id: string
   ownerId: string | { _id: string; name: string; phone: string; email?: string; image?: string }
+  customOwnerName?: string | null
   title: string
   description: string
   propertyType: PropertyType

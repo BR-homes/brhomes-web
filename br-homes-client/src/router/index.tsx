@@ -95,6 +95,8 @@ export const router = createBrowserRouter([
               { path: '/admin/pending-owners', element: <PendingOwnersPage /> },
               { path: '/admin/pending-properties', element: <PendingPropertiesPage /> },
               { path: '/admin/properties', element: <ManagePropertiesPage /> },
+              { path: '/admin/add-property', element: <AddPropertyPage /> },
+              { path: '/admin/edit-property/:id', element: <EditPropertyPage /> },
               { path: '/admin/users', element: <ManageUsersPage /> },
               { path: '/admin/settings', element: <SettingsPage /> },
               { path: '/admin/slider', element: <AdminSliderPage /> },

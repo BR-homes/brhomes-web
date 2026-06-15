@@ -34,11 +34,11 @@ const upload = multer({
 router.get('/', optionalSessionGuard, getProperties)
 router.get('/:id', optionalSessionGuard, getPropertyById)
 
-// Owner routes
+// Owner/Admin routes
 router.post(
   '/',
   sessionGuard,
-  roleGuard('owner'),
+  roleGuard('owner', 'admin'),
   ownerApprovedGuard,
   imageLimitGuard,
   upload.array('images', 10),
@@ -48,7 +48,7 @@ router.post(
 router.put(
   '/:id',
   sessionGuard,
-  roleGuard('owner'),
+  roleGuard('owner', 'admin'),
   imageLimitGuard,
   upload.array('images', 10),
   updateProperty
@@ -57,21 +57,21 @@ router.put(
 router.patch(
   '/:id/hide',
   sessionGuard,
-  roleGuard('owner'),
+  roleGuard('owner', 'admin'),
   toggleHideProperty
 )
 
 router.patch(
   '/:id/mark',
   sessionGuard,
-  roleGuard('owner'),
+  roleGuard('owner', 'admin'),
   markProperty
 )
 
 router.delete(
   '/:id',
   sessionGuard,
-  roleGuard('owner'),
+  roleGuard('owner', 'admin'),
   deleteProperty
 )
 

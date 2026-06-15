@@ -9,6 +9,7 @@ export interface IPropertyImage {
 export interface IProperty extends Document {
   _id: Types.ObjectId
   ownerId: Types.ObjectId
+  customOwnerName: string | null
   title: string
   description: string
   propertyType: 'house' | 'flat'
@@ -57,6 +58,11 @@ const propertySchema = new Schema<IProperty>(
       ref: 'User',
       required: [true, 'Owner ID is required'],
       index: true,
+    },
+    customOwnerName: {
+      type: String,
+      default: null,
+      trim: true,
     },
     title: {
       type: String,

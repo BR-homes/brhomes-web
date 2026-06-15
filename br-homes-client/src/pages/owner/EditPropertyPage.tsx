@@ -5,11 +5,14 @@ import PropertyForm from '@/components/forms/PropertyForm'
 import LoadingSkeleton from '@/components/common/LoadingSkeleton'
 import { useProperty } from '@/hooks/useProperties'
 import { queryKeys } from '@/lib/queryClient'
+import { useAuthStore } from '@/store/authStore'
 import api from '@/lib/axios'
 
 export default function EditPropertyPage() {
   const { id } = useParams<{ id: string }>()
   const { data, isLoading } = useProperty(id!)
+  const { user } = useAuthStore()
+  const isAdmin = user?.role === 'admin'
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState('')
   const navigate = useNavigate()
@@ -25,9 +28,14 @@ export default function EditPropertyPage() {
       await api.put(`/api/properties/${id}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
-      queryClient.invalidateQueries({ queryKey: queryKeys.owner.properties })
+      if (isAdmin) {
+        queryClient.invalidateQueries({ queryKey: ['admin', 'properties'] })
+      } else {
+        queryClient.invalidateQueries({ queryKey: queryKeys.owner.properties })
+        queryClient.invalidateQueries({ queryKey: queryKeys.owner.stats })
+      }
       queryClient.invalidateQueries({ queryKey: queryKeys.properties.detail(id!) })
-      navigate('/owner/properties')
+      navigate(isAdmin ? '/admin/properties' : '/owner/properties')
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to update property.')
     } finally {
@@ -38,7 +46,11 @@ export default function EditPropertyPage() {
   return (
     <div className="page-enter max-w-2xl">
       <h1 className="text-2xl font-bold text-slate-900 mb-2">Edit Property</h1>
-      <p className="text-slate-500 text-sm mb-8">Changes will be re-submitted for review.</p>
+      <p className="text-slate-500 text-sm mb-8">
+        {isAdmin
+          ? 'Modify the property listing details.'
+          : 'Changes will be re-submitted for review.'}
+      </p>
       {error && <div className="bg-red-50 text-red-700 text-sm p-3 rounded-lg mb-6 border border-red-200">{error}</div>}
       <PropertyForm initialData={data.data} onSubmit={handleSubmit} isSubmitting={isSubmitting} />
     </div>

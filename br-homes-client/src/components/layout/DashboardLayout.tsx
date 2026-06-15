@@ -19,6 +19,7 @@ export default function DashboardLayout() {
     { to: '/admin/pending-owners', label: 'Pending Owners', icon: UserCheck },
     { to: '/admin/pending-properties', label: 'Pending Properties', icon: ClipboardCheck },
     { to: '/admin/properties', label: 'All Properties', icon: Building2 },
+    { to: '/admin/add-property', label: 'Add Property', icon: Plus },
     { to: '/admin/slider', label: 'Slider Images', icon: ImagePlus },
     { to: '/admin/sidebar-ads', label: 'Sidebar Ads', icon: Film },
     { to: '/admin/users', label: 'Manage Users', icon: Users },

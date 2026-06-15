@@ -7,9 +7,13 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useImageUpload } from '@/hooks/useImageUpload'
-import type { IProperty } from '@/types'
+import { useAuthStore } from '@/store/authStore'
+import { useQuery } from '@tanstack/react-query'
+import api from '@/lib/axios'
+import type { IProperty, IUser, IApiResponse } from '@/types'
 
 const propertySchema = z.object({
+  customOwnerName: z.string().optional(),
   title: z.string().min(5, 'Title must be at least 5 characters').max(150, 'Title cannot exceed 150 characters'),
   description: z.string().min(20, 'Description must be at least 20 characters').max(2000, 'Description cannot exceed 2000 characters'),
   propertyType: z.enum(['house', 'flat']),
@@ -41,6 +45,18 @@ const propertySchema = z.object({
   path: ['bhk'],
 })
 
+const getPropertySchema = (isAdmin: boolean) => {
+  return propertySchema.superRefine((data, ctx) => {
+    if (isAdmin && (!data.customOwnerName || data.customOwnerName.trim() === '')) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Owner Name is required',
+        path: ['customOwnerName'],
+      })
+    }
+  })
+}
+
 type PropertyFormData = z.infer<typeof propertySchema>
 
 interface PropertyFormProps {
@@ -50,6 +66,9 @@ interface PropertyFormProps {
 }
 
 export default function PropertyForm({ initialData, onSubmit, isSubmitting }: PropertyFormProps) {
+  const { user } = useAuthStore()
+  const isAdmin = user?.role === 'admin'
+
   const [existingImages, setExistingImages] = useState(initialData?.images || [])
   const [removedImagePublicIds, setRemovedImagePublicIds] = useState<string[]>([])
 
@@ -57,8 +76,9 @@ export default function PropertyForm({ initialData, onSubmit, isSubmitting }: Pr
   const canAddMore = (existingImages.length + previews.length) < 7
 
   const { register, handleSubmit, watch, formState: { errors } } = useForm<PropertyFormData>({
-    resolver: zodResolver(propertySchema),
+    resolver: zodResolver(getPropertySchema(isAdmin)),
     defaultValues: initialData ? {
+      customOwnerName: initialData.customOwnerName || '',
       title: initialData.title,
       description: initialData.description,
       propertyType: initialData.propertyType,
@@ -71,6 +91,7 @@ export default function PropertyForm({ initialData, onSubmit, isSubmitting }: Pr
       pincode: initialData.pincode,
       contactPhone: initialData.contactPhone,
     } : {
+      customOwnerName: '',
       propertyType: 'house',
       listingType: 'sale',
       city: 'Amreli',
@@ -97,6 +118,24 @@ export default function PropertyForm({ initialData, onSubmit, isSubmitting }: Pr
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
+      {/* Owner Selection (Admin Only) */}
+      {isAdmin && (
+        <div className="space-y-4 bg-slate-50 p-4 rounded-xl border border-slate-200">
+          <h3 className="text-lg font-semibold text-slate-900">Owner Information</h3>
+          <div>
+            <Label htmlFor="customOwnerName">Owner Name *</Label>
+            <Input
+              id="customOwnerName"
+              placeholder="e.g. Rajesh Kumar"
+              {...register('customOwnerName')}
+              className="mt-1"
+            />
+            {errors.customOwnerName && <p className="text-red-500 text-xs mt-1">{errors.customOwnerName.message}</p>}
+            <p className="text-xs text-slate-400 mt-1">This is the name of the owner that will be displayed publicly on this property.</p>
+          </div>
+        </div>
+      )}
+
       {/* Basic Info */}
       <div className="space-y-4">
         <h3 className="text-lg font-semibold text-slate-900">Basic Information</h3>
