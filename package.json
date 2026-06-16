@@ -8,5 +8,8 @@
   "scripts": {
     "build:client": "npm run build --prefix br-homes-client",
     "build:server": "npm run build --prefix br-homes-server"
+  },
+  "dependencies": {
+    "hasown": "^2.0.4"
   }
 }

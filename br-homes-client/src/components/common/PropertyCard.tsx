@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge'
 import { formatPrice, getPropertyTypeLabel } from '@/lib/utils'
 import type { IProperty, PropertyStatus } from '@/types'
 import SavePropertyButton from '@/components/common/SavePropertyButton'
+import SharePropertyButton from '@/components/common/SharePropertyButton'
 import ImageCarousel from '@/components/common/ImageCarousel'
 
 interface PropertyCardProps {
@@ -61,7 +62,10 @@ export default function PropertyCard({ property, showStatus = false }: PropertyC
               </Badge>
             )}
             {!showStatus && (
-              <SavePropertyButton propertyId={property._id} />
+              <div className="flex flex-col gap-2">
+                <SavePropertyButton propertyId={property._id} />
+                <SharePropertyButton property={property} />
+              </div>
             )}
           </div>
         </div>

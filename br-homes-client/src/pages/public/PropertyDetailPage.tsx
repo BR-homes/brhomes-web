@@ -8,6 +8,7 @@ import { useUIStore } from '@/store/uiStore'
 import { formatPrice, formatDate, getPropertyTypeLabel } from '@/lib/utils'
 import { useState, useEffect, useCallback } from 'react'
 import SavePropertyButton from '@/components/common/SavePropertyButton'
+import SharePropertyButton from '@/components/common/SharePropertyButton'
 import SidebarAdSlider from '@/components/common/SidebarAdSlider'
 
 export default function PropertyDetailPage() {
@@ -208,7 +209,10 @@ export default function PropertyDetailPage() {
                 <p className="text-xs text-slate-400 text-center mt-3 mb-6">
                   Call the owner directly - no broker involved
                 </p>
-                <SavePropertyButton propertyId={property._id} variant="full" />
+                <div className="flex flex-col gap-3">
+                  <SavePropertyButton propertyId={property._id} variant="full" />
+                  <SharePropertyButton property={property} variant="full" />
+                </div>
               </div>
             </div>
           </div>

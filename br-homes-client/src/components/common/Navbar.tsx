@@ -25,8 +25,8 @@ export default function Navbar() {
     if (!isAuthenticated) {
       return (
         <>
-          <Link to="/properties" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium">
-            Browse
+          <Link to="/properties" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium flex items-center gap-1.5">
+            <Building2 className="w-4 h-4" /> Browse
           </Link>
           <Link to="/contact" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium flex items-center gap-1.5">
             <Phone className="w-4 h-4" /> Contact
