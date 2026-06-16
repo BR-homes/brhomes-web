@@ -2,7 +2,8 @@ import { NavLink, Outlet } from 'react-router-dom'
 import { useAuthStore } from '@/store/authStore'
 import {
   LayoutDashboard, Building2, Plus, Users, ClipboardCheck,
-  Settings, Shield, UserCheck, BarChart3, ImagePlus, Film
+  Settings, Shield, UserCheck, BarChart3, ImagePlus, Film,
+  LayoutGrid, Briefcase
 } from 'lucide-react'
 
 export default function DashboardLayout() {
@@ -22,6 +23,8 @@ export default function DashboardLayout() {
     { to: '/admin/add-property', label: 'Add Property', icon: Plus },
     { to: '/admin/slider', label: 'Slider Images', icon: ImagePlus },
     { to: '/admin/sidebar-ads', label: 'Sidebar Ads', icon: Film },
+    { to: '/admin/categories', label: 'Manage Categories', icon: LayoutGrid },
+    { to: '/admin/services', label: 'Manage Services', icon: Briefcase },
     { to: '/admin/users', label: 'Manage Users', icon: Users },
     { to: '/admin/settings', label: 'Settings', icon: Settings },
   ]

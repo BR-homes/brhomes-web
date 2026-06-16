@@ -6,6 +6,7 @@ import LoadingSkeleton from '@/components/common/LoadingSkeleton'
 import SidebarAdSlider from '@/components/common/SidebarAdSlider'
 import { useProperties } from '@/hooks/useProperties'
 import { useSliderImages } from '@/hooks/useSliderImages'
+import { useCategories } from '@/hooks/useCategories'
 import { useFilterStore } from '@/store/filterStore'
 import { useEffect, useState } from 'react'
 
@@ -15,6 +16,8 @@ export default function HomePage() {
   const filters = useFilterStore()
   const { data: sliderData } = useSliderImages()
   const sliderImages = sliderData?.data || []
+  const { data: catData } = useCategories()
+  const categories = catData?.data || []
   const [index, setIndex] = useState(0)
   const [isHovered, setIsHovered] = useState(false)
 
@@ -106,28 +109,38 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Property Types */}
-      {/* <section className="py-8 bg-white border-b border-slate-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            {[
-              { icon: Home, label: 'Houses', type: 'house', color: 'bg-blue-50 text-blue-600' },
-              { icon: Building2, label: 'Flats', type: 'flat', color: 'bg-purple-50 text-purple-600' },
-            ].map((item) => (
-              <Link
-                key={item.type}
-                to={`/properties?propertyType=${item.type}`}
-                className="group flex flex-col items-center gap-3 p-6 rounded-xl border border-slate-200 hover:border-slate-300 hover:shadow-md transition-all duration-300"
-              >
-                <div className={`w-12 h-12 rounded-xl ${item.color} flex items-center justify-center group-hover:scale-110 transition-transform`}>
-                  <item.icon className="w-6 h-6" />
-                </div>
-                <span className="font-semibold text-slate-700 text-sm">{item.label}</span>
-              </Link>
-            ))}
+      {/* Categories / In-House Services Section */}
+      {categories.length > 0 && (
+        <section className="py-10 bg-white border-b border-slate-100">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-bold text-slate-900 tracking-tight">In-House Services</h2>
+              <p className="text-sm text-slate-500 mt-1">Select a category to view and call listed service providers.</p>
+            </div>
+            
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+              {categories.map((cat: any) => (
+                <Link
+                  key={cat._id}
+                  to={`/categories/${cat._id}`}
+                  className="group bg-white p-5 rounded-2xl border border-slate-200 hover:border-slate-950 hover:shadow-md transition-all duration-300 flex flex-col items-center justify-center text-center active:scale-95"
+                >
+                  <div className="w-16 h-16 rounded-xl overflow-hidden bg-slate-50 flex items-center justify-center mb-3 group-hover:scale-105 transition-transform duration-300 border border-slate-100">
+                    <img 
+                      src={cat.imageUrl} 
+                      alt={cat.title} 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <span className="font-bold text-slate-700 text-sm group-hover:text-slate-950 leading-tight">
+                    {cat.title}
+                  </span>
+                </Link>
+              ))}
+            </div>
           </div>
-        </div>
-      </section> */}
+        </section>
+      )}
 
 
       {/* Search + Results */}

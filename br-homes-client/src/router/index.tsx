@@ -35,7 +35,10 @@ import ManageUsersPage from '@/pages/admin/ManageUsersPage'
 import SettingsPage from '@/pages/admin/SettingsPage'
 import AdminSliderPage from '@/pages/admin/AdminSliderPage'
 import AdminSidebarAdsPage from '@/pages/admin/AdminSidebarAdsPage'
+import ManageCategoriesPage from '@/pages/admin/ManageCategoriesPage'
+import ManageServicesPage from '@/pages/admin/ManageServicesPage'
 import ContactPage from '@/pages/public/ContactPage'
+import CategoryDetailPage from '@/pages/public/CategoryDetailPage'
 
 export const router = createBrowserRouter([
   // Auth pages (no navbar/footer)
@@ -59,6 +62,7 @@ export const router = createBrowserRouter([
       { path: '/contact', element: <ContactPage /> },
       { path: '/properties', element: <ListingsPage /> },
       { path: '/properties/:id', element: <PropertyDetailPage /> },
+      { path: '/categories/:id', element: <CategoryDetailPage /> },
 
       // Shared authenticated routes
       {
@@ -101,6 +105,8 @@ export const router = createBrowserRouter([
               { path: '/admin/settings', element: <SettingsPage /> },
               { path: '/admin/slider', element: <AdminSliderPage /> },
               { path: '/admin/sidebar-ads', element: <AdminSidebarAdsPage /> },
+              { path: '/admin/categories', element: <ManageCategoriesPage /> },
+              { path: '/admin/services', element: <ManageServicesPage /> },
             ],
           },
         ],

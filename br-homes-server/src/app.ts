@@ -12,6 +12,8 @@ import savedRoutes from './routes/saved.routes'
 import adminRoutes from './routes/admin.routes'
 import sliderRoutes from './routes/slider.routes'
 import sidebarAdRoutes from './routes/sidebarAd.routes'
+import categoryRoutes from './routes/category.routes'
+import serviceRoutes from './routes/service.routes'
 
 const app = express()
 
@@ -48,6 +50,8 @@ app.use('/api/saved', savedRoutes)
 app.use('/api/sliders', sliderRoutes)
 app.use('/api/sidebar-ads', sidebarAdRoutes)
 app.use('/api/admin', adminRoutes)
+app.use('/api/categories', categoryRoutes)
+app.use('/api/services', serviceRoutes)
 
 // Global error handler - MUST be last
 app.use(errorMiddleware)
