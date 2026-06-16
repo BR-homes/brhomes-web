@@ -26,7 +26,7 @@ export default function Navbar() {
       return (
         <>
           <Link to="/properties" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium">
-            Browse
+            <Building2 className="w-4 h-4" /> Browse
           </Link>
           <Link to="/contact" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium flex items-center gap-1.5">
             <Phone className="w-4 h-4" /> Contact
@@ -62,14 +62,14 @@ export default function Navbar() {
             <Link to="/owner/dashboard" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium flex items-center gap-1.5">
               <LayoutDashboard className="w-4 h-4" /> Dashboard
             </Link>
-            <Link to="/saved" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium flex items-center gap-1.5">
-              <Heart className="w-4 h-4" /> Saved
+            <Link to="/properties" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium flex items-center gap-1.5">
+              <Building2 className="w-4 h-4" /> Browse
             </Link>
             <Link to="/contact" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium flex items-center gap-1.5">
               <Phone className="w-4 h-4" /> Contact
             </Link>
-            <Link to="/properties" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium flex items-center gap-1.5">
-              <Building2 className="w-4 h-4" /> Browse
+            <Link to="/saved" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium flex items-center gap-1.5">
+              <Heart className="w-4 h-4" /> Saved
             </Link>
           </>
         )
@@ -79,14 +79,14 @@ export default function Navbar() {
             <Link to="/admin/dashboard" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium flex items-center gap-1.5">
               <Shield className="w-4 h-4" /> Admin Panel
             </Link>
-            <Link to="/saved" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium flex items-center gap-1.5">
-              <Heart className="w-4 h-4" /> Saved
+            <Link to="/properties" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium flex items-center gap-1.5">
+              <Building2 className="w-4 h-4" /> Browse
             </Link>
             <Link to="/contact" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium flex items-center gap-1.5">
               <Phone className="w-4 h-4" /> Contact
             </Link>
-            <Link to="/properties" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium flex items-center gap-1.5">
-              <Building2 className="w-4 h-4" /> Browse
+            <Link to="/saved" onClick={closeMobileMenu} className="text-slate-600 hover:text-slate-900 transition-colors font-medium flex items-center gap-1.5">
+              <Heart className="w-4 h-4" /> Saved
             </Link>
           </>
         )
