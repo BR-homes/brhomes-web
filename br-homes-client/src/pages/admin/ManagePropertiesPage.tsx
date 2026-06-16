@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { Building2, Trash2, MapPin, Loader2 } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { Building2, Trash2, MapPin, Loader2, Edit } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import LoadingSkeleton from '@/components/common/LoadingSkeleton'
@@ -85,23 +86,39 @@ export default function ManagePropertiesPage() {
                       <span>{getPropertyTypeLabel(prop.propertyType)}</span>
                       <span>{formatPrice(prop.price)}</span>
                       <span className="flex items-center gap-0.5"><MapPin className="w-3 h-3" />{prop.city}</span>
-                      {owner && <span>by {owner.name}</span>}
+                      {prop.customOwnerName ? (
+                        <span>by {prop.customOwnerName}</span>
+                      ) : owner ? (
+                        <span>by {owner.name}</span>
+                      ) : null}
                     </div>
                   </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    disabled={deleteMutation.isPending}
-                    onClick={() => setDeleteId(prop._id)}
-                    className="text-red-500 hover:text-red-600 hover:bg-red-50 flex-shrink-0"
-                    aria-label="Delete property"
-                  >
-                    {deleteMutation.isPending && deleteMutation.variables === prop._id ? (
-                      <Loader2 className="w-4 h-4 animate-spin text-red-500" />
-                    ) : (
-                      <Trash2 className="w-4 h-4" />
-                    )}
-                  </Button>
+                  <div className="flex items-center gap-1 flex-shrink-0">
+                    <Link to={`/admin/edit-property/${prop._id}`}>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="text-slate-500 hover:text-slate-700 hover:bg-slate-50"
+                        aria-label="Edit property"
+                      >
+                        <Edit className="w-4 h-4" />
+                      </Button>
+                    </Link>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      disabled={deleteMutation.isPending}
+                      onClick={() => setDeleteId(prop._id)}
+                      className="text-red-500 hover:text-red-600 hover:bg-red-50"
+                      aria-label="Delete property"
+                    >
+                      {deleteMutation.isPending && deleteMutation.variables === prop._id ? (
+                        <Loader2 className="w-4 h-4 animate-spin text-red-500" />
+                      ) : (
+                        <Trash2 className="w-4 h-4" />
+                      )}
+                    </Button>
+                  </div>
                 </div>
               )
             })}

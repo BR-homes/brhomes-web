@@ -358,7 +358,7 @@ export const toggleUserActive = asyncHandler(
       adminId: req.sessionUser!.id,
       targetId: user._id,
       targetType: 'user',
-      action: user.isActive ? 'user_activated' : 'user_deactivated',
+      action: user.isActive ? 'user_reactivated' : 'user_deactivated',
       actedAt: new Date(),
     })
 

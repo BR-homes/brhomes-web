@@ -5,6 +5,8 @@ import { sendSuccess } from '../utils/responseHandler'
 import { uploadImage, deleteImages } from '../utils/cloudinaryUtils'
 import Property from '../models/Property.model'
 import SavedProperty from '../models/SavedProperty.model'
+import User from '../models/User.model'
+import { Types } from 'mongoose'
 import {
   createPropertySchema,
   updatePropertySchema,
@@ -140,19 +142,29 @@ export const createProperty = asyncHandler(
       }
     }
 
-    const data = parsed.data
-    const bhk = data.bhk
+    const { customOwnerName, ...propertyData } = parsed.data
+    const bhk = propertyData.bhk
+
+    const isAdmin = req.sessionUser!.role === 'admin'
 
     const property = await Property.create({
-      ...data,
+      ...propertyData,
       bhk,
-      ownerId: req.sessionUser!.id,
-      status: 'pending',
-      approvalRequestedAt: new Date(),
+      ownerId: new Types.ObjectId(req.sessionUser!.id),
+      customOwnerName: isAdmin && customOwnerName ? customOwnerName : null,
+      status: isAdmin ? 'approved' : 'pending',
+      approvedAt: isAdmin ? new Date() : null,
+      approvedBy: isAdmin ? new Types.ObjectId(req.sessionUser!.id) : null,
+      approvalRequestedAt: isAdmin ? null : new Date(),
       images,
     })
 
-    sendSuccess(res, 'Property created and submitted for review', property, 201)
+    sendSuccess(
+      res,
+      isAdmin ? 'Property created successfully' : 'Property created and submitted for review',
+      property,
+      201
+    )
   }
 )
 
@@ -167,8 +179,10 @@ export const updateProperty = asyncHandler(
       throw new AppError('Property not found', 404, 'NOT_FOUND')
     }
 
-    // Only the owner can edit
-    if (property.ownerId.toString() !== req.sessionUser!.id) {
+    const isAdmin = req.sessionUser!.role === 'admin'
+
+    // Only the owner or admin can edit
+    if (property.ownerId.toString() !== req.sessionUser!.id && !isAdmin) {
       throw new AppError('Access denied', 403, 'ACCESS_DENIED')
     }
 
@@ -177,8 +191,13 @@ export const updateProperty = asyncHandler(
       throw new AppError('Validation failed', 422, 'VALIDATION_ERROR')
     }
 
-    const { removeImages, ...updateData } = parsed.data
+    const { removeImages, customOwnerName, ...updateData } = parsed.data
     const effectiveImageLimit = (req as any).effectiveImageLimit || 7
+
+    // Update custom owner name if admin
+    if (isAdmin && customOwnerName !== undefined) {
+      property.customOwnerName = customOwnerName || null
+    }
 
     // Remove specified images from Cloudinary
     if (removeImages && removeImages.length > 0) {
@@ -220,8 +239,8 @@ export const updateProperty = asyncHandler(
     // Apply text updates
     Object.assign(property, updateData)
 
-    // Re-set status to pending on edit (needs re-approval)
-    if (['approved', 'rejected'].includes(property.status)) {
+    // Re-set status to pending on edit (needs re-approval) - bypass for admin
+    if (!isAdmin && ['approved', 'rejected'].includes(property.status)) {
       property.status = 'pending'
       property.approvalRequestedAt = new Date()
       property.approvedAt = null
@@ -248,7 +267,7 @@ export const toggleHideProperty = asyncHandler(
       throw new AppError('Property not found', 404, 'NOT_FOUND')
     }
 
-    if (property.ownerId.toString() !== req.sessionUser!.id) {
+    if (property.ownerId.toString() !== req.sessionUser!.id && req.sessionUser!.role !== 'admin') {
       throw new AppError('Access denied', 403, 'ACCESS_DENIED')
     }
 
@@ -281,7 +300,7 @@ export const markProperty = asyncHandler(async (req: Request, res: Response) => 
     throw new AppError('Property not found', 404, 'NOT_FOUND')
   }
 
-  if (property.ownerId.toString() !== req.sessionUser!.id) {
+  if (property.ownerId.toString() !== req.sessionUser!.id && req.sessionUser!.role !== 'admin') {
     throw new AppError('Access denied', 403, 'ACCESS_DENIED')
   }
 
@@ -307,7 +326,7 @@ export const deleteProperty = asyncHandler(
       throw new AppError('Property not found', 404, 'NOT_FOUND')
     }
 
-    if (property.ownerId.toString() !== req.sessionUser!.id) {
+    if (property.ownerId.toString() !== req.sessionUser!.id && req.sessionUser!.role !== 'admin') {
       throw new AppError('Access denied', 403, 'ACCESS_DENIED')
     }
 

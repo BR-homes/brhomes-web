@@ -2,6 +2,7 @@ import { z } from 'zod'
 
 export const createPropertySchema = z
   .object({
+    customOwnerName: z.string().optional(),
     title: z.string().min(5, 'Title must be at least 5 characters').max(150).trim(),
     description: z
       .string()
@@ -30,7 +31,7 @@ export const createPropertySchema = z
       if (['house', 'flat'].includes(data.propertyType)) {
         return data.bhk != null && data.bhk >= 1 && data.bhk <= 5
       }
-      return true
+      return true;
     },
     {
       message: 'BHK is required for house and flat (1-5)',
@@ -40,6 +41,7 @@ export const createPropertySchema = z
     // No need to validate shop/land-specific BHK rules since only house/flat are allowed
 
 export const updatePropertySchema = z.object({
+  customOwnerName: z.string().optional(),
   title: z.string().min(5).max(150).trim().optional(),
   description: z.string().min(20).max(2000).trim().optional(),
   propertyType: z.enum(['house', 'flat']).optional(),

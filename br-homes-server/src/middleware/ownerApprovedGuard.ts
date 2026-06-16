@@ -6,6 +6,9 @@ const ownerApprovedGuard = (
   _res: Response,
   next: NextFunction
 ): void => {
+  if (req.sessionUser?.role === 'admin') {
+    return next()
+  }
   if (!req.sessionUser?.ownerApproved) {
     return next(
       new AppError(
