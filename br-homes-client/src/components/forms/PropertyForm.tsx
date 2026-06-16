@@ -186,14 +186,14 @@ export default function PropertyForm({ initialData, onSubmit, isSubmitting }: Pr
           )}
           <div>
             <Label>Area (sq.ft) *</Label>
-            <Input type="number" placeholder="e.g. 1200" {...register('areaSqft')} className="mt-1" />
+            <Input type="number" placeholder="e.g. 1200" {...register('areaSqft')} className="mt-1" onWheel={(e) => e.currentTarget.blur()} />
             {errors.areaSqft && <p className="text-red-500 text-xs mt-1">{errors.areaSqft.message}</p>}
           </div>
         </div>
 
         <div>
           <Label htmlFor="price">Price (₹) *</Label>
-          <Input id="price" type="number" placeholder="e.g. 2500000" {...register('price')} className="mt-1" />
+          <Input id="price" type="number" placeholder="e.g. 2500000" {...register('price')} className="mt-1" onWheel={(e) => e.currentTarget.blur()} />
           {errors.price && <p className="text-red-500 text-xs mt-1">{errors.price.message}</p>}
         </div>
       </div>

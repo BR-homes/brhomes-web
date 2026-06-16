@@ -2,7 +2,7 @@ import mongoose, { Document, Schema } from 'mongoose'
 
 export interface IService extends Document {
   title: string
-  description: string
+  description?: string
   contactPhone: string
   categoryId: mongoose.Types.ObjectId
   isActive: boolean
@@ -11,7 +11,7 @@ export interface IService extends Document {
 
 const ServiceSchema = new Schema<IService>({
   title: { type: String, required: true, trim: true },
-  description: { type: String, required: true, trim: true },
+  description: { type: String, required: false, trim: true, default: '' },
   contactPhone: { type: String, required: true, trim: true },
   categoryId: { type: Schema.Types.ObjectId, ref: 'Category', required: true },
   isActive: { type: Boolean, required: true, default: true },

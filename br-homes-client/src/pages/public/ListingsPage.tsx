@@ -122,6 +122,7 @@ export default function ListingsPage() {
                   filters.setFilter('minPrice', val)
                 }
               }}
+              onWheel={(e) => e.currentTarget.blur()}
               className="max-w-[180px]"
             />
             <Input
@@ -134,6 +135,7 @@ export default function ListingsPage() {
                   filters.setFilter('maxPrice', val)
                 }
               }}
+              onWheel={(e) => e.currentTarget.blur()}
               className="max-w-[180px]"
             />
           </div>

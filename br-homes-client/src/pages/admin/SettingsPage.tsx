@@ -66,6 +66,7 @@ export default function SettingsPage() {
                 placeholder={`Current: ${currentLimit}`}
                 value={newLimit}
                 onChange={(e) => setNewLimit(e.target.value)}
+                onWheel={(e) => e.currentTarget.blur()}
               />
               {newLimit && (parseInt(newLimit) < 1 || parseInt(newLimit) > 20) && (
                 <p className="text-red-500 text-xs mt-1">Image limit must be between 1 and 20</p>

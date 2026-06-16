@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
-import { Building2, Trash2, MapPin, Loader2, Edit } from 'lucide-react'
+import { Building2, Trash2, MapPin, Loader2, Edit, Eye, EyeOff } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import LoadingSkeleton from '@/components/common/LoadingSkeleton'
@@ -10,6 +10,7 @@ import { queryKeys } from '@/lib/queryClient'
 import { formatPrice, getPropertyTypeLabel, getStatusColor } from '@/lib/utils'
 import api from '@/lib/axios'
 import type { IProperty, IApiResponse } from '@/types'
+import { toast } from 'react-hot-toast'
 
 export default function ManagePropertiesPage() {
   const queryClient = useQueryClient()
@@ -30,6 +31,18 @@ export default function ManagePropertiesPage() {
   const deleteMutation = useMutation({
     mutationFn: (id: string) => api.delete(`/api/admin/properties/${id}`),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['admin', 'properties'] }),
+  })
+
+  const toggleHideMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const res = await api.patch(`/api/properties/${id}/hide`)
+      return res.data
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['admin', 'properties'] })
+      queryClient.invalidateQueries({ queryKey: ['properties'] })
+      toast.success(data?.message || 'Property status updated successfully')
+    },
   })
 
   const properties = data?.data || []
@@ -94,6 +107,25 @@ export default function ManagePropertiesPage() {
                     </div>
                   </div>
                   <div className="flex items-center gap-1 flex-shrink-0">
+                    {(prop.status === 'approved' || prop.status === 'hidden') && (
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        disabled={toggleHideMutation.isPending}
+                        onClick={() => toggleHideMutation.mutate(prop._id)}
+                        className="text-slate-500 hover:text-slate-700 hover:bg-slate-50"
+                        title={prop.status === 'approved' ? 'Hide property' : 'Show property'}
+                        aria-label={prop.status === 'approved' ? 'Hide property' : 'Show property'}
+                      >
+                        {toggleHideMutation.isPending && toggleHideMutation.variables === prop._id ? (
+                          <Loader2 className="w-4 h-4 animate-spin text-slate-500" />
+                        ) : prop.status === 'approved' ? (
+                          <Eye className="w-4 h-4" />
+                        ) : (
+                          <EyeOff className="w-4 h-4" />
+                        )}
+                      </Button>
+                    )}
                     <Link to={`/admin/edit-property/${prop._id}`}>
                       <Button
                         variant="ghost"

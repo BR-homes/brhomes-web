@@ -41,8 +41,8 @@ export const adminGetServices = asyncHandler(async (req: Request, res: Response)
 export const createService = asyncHandler(async (req: Request, res: Response) => {
   const { title, description, contactPhone, categoryId } = req.body
 
-  if (!title || !description || !contactPhone || !categoryId) {
-    throw new AppError('Title, description, contact phone, and category ID are required', 400, 'VALIDATION_ERROR')
+  if (!title || !contactPhone || !categoryId) {
+    throw new AppError('Title, contact phone, and category ID are required', 400, 'VALIDATION_ERROR')
   }
 
   // Verify category exists
@@ -53,7 +53,7 @@ export const createService = asyncHandler(async (req: Request, res: Response) =>
 
   const service = await Service.create({
     title: title.trim(),
-    description: description.trim(),
+    description: description ? description.trim() : '',
     contactPhone: contactPhone.trim(),
     categoryId,
     isActive: true,
@@ -76,7 +76,7 @@ export const updateService = asyncHandler(async (req: Request, res: Response) =>
   }
 
   if (title) service.title = title.trim()
-  if (description) service.description = description.trim()
+  if (description !== undefined) service.description = description.trim()
   if (contactPhone) service.contactPhone = contactPhone.trim()
 
   if (categoryId) {

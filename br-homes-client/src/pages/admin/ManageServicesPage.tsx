@@ -50,8 +50,8 @@ export default function ManageServicesPage() {
   // Handle submit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!title.trim() || !description.trim() || !contactPhone.trim() || !categoryId) {
-      toast.error('All fields are required')
+    if (!title.trim() || !contactPhone.trim() || !categoryId) {
+      toast.error('Title, contact phone, and category are required')
       return
     }
 
@@ -164,7 +164,7 @@ export default function ManageServicesPage() {
 
               <div>
                 <label className="block text-sm font-semibold text-slate-700 mb-1">
-                  Description
+                  Description (Optional)
                 </label>
                 <textarea
                   value={description}
