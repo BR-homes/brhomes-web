@@ -1,7 +1,10 @@
 import { Link } from 'react-router-dom'
 import { Home, Phone, MapPin, Mail } from 'lucide-react'
+import { useAuthStore } from '@/store/authStore'
 
 export default function Footer() {
+  const { isAuthenticated } = useAuthStore()
+
   return (
     <footer className="bg-slate-900 text-slate-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -10,9 +13,6 @@ export default function Footer() {
           <div>
             <Link to="/" className="flex items-center gap-2 mb-4">
               <img src="/logo.jpg" alt="BR-Homes Logo" className="h-10" />
-              <span className="text-xl font-bold text-white tracking-tight">
-                BR<span className="text-slate-400">-Homes</span>
-              </span>
             </Link>
             <p className="text-sm text-slate-400 leading-relaxed max-w-xs">
               No-broker real estate marketplace for Amreli, Gujarat. 
@@ -26,7 +26,9 @@ export default function Footer() {
             <ul className="space-y-2">
               <li><Link to="/properties" className="text-sm hover:text-white transition-colors">Browse Properties</Link></li>
               <li><Link to="/register" className="text-sm hover:text-white transition-colors">List Your Property</Link></li>
-              <li><Link to="/login" className="text-sm hover:text-white transition-colors">Sign In</Link></li>
+              {!isAuthenticated && (
+                <li><Link to="/login" className="text-sm hover:text-white transition-colors">Sign In</Link></li>
+              )}
             </ul>
           </div>
 

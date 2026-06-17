@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom'
 import { MapPin, Phone, BedDouble, Maximize2, IndianRupee, Calendar, ChevronLeft, ChevronRight, User } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+
 import LoadingSkeleton from '@/components/common/LoadingSkeleton'
 import { useProperty } from '@/hooks/useProperties'
 import { useUIStore } from '@/store/uiStore'
@@ -56,7 +56,7 @@ export default function PropertyDetailPage() {
 
   return (
     <div className="page-enter max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
-      <div className="grid grid-cols-1 lg:grid-cols-[7.7fr_2.3fr] gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-[6.8fr_3.2fr] lg:grid-cols-[7.2fr_2.8fr] gap-8">
         {/* Details */}
         <div className="space-y-6">
           {/* Image Gallery */}
@@ -178,8 +178,8 @@ export default function PropertyDetailPage() {
                 <p className="text-slate-600 leading-relaxed whitespace-pre-line">{property.description}</p>
               </div>
 
-              {/* Mobile Ad Slider (Visible only on mobile/tablet screens) */}
-              <div className="block lg:hidden">
+              {/* Mobile Ad Slider (Visible only on mobile screens) */}
+              <div className="block md:hidden">
                 <SidebarAdSlider id="mobile-detail-ad-1" layout="inline" />
               </div>
             </div>
@@ -219,7 +219,7 @@ export default function PropertyDetailPage() {
         </div>
 
         {/* Sidebar: Advertisement Videos (Muted Autoplay sequential) */}
-        <div className="hidden lg:block">
+        <div className="hidden md:block">
           <div className="sticky top-24 space-y-4 w-full">
             <SidebarAdSlider id="sidebar-ad-1" layout="sidebar" />
             <SidebarAdSlider id="sidebar-ad-2" layout="sidebar" />

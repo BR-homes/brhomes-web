@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { ArrowRight, Shield, Phone, Search, Building2, Home, ChevronLeft, ChevronRight } from 'lucide-react'
+import { ArrowRight, Phone, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import PropertyGrid from '@/components/common/PropertyGrid'
 import LoadingSkeleton from '@/components/common/LoadingSkeleton'
@@ -146,6 +146,14 @@ export default function HomePage() {
       {/* Search + Results */}
       <section className="py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Ads Section in the Middle of Components */}
+          <div className="max-w-4xl mx-auto mb-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <SidebarAdSlider id="homepage-ad-1" layout="inline" />
+              <SidebarAdSlider id="homepage-ad-2" layout="inline" />
+            </div>
+          </div>
+
           <div className="mb-6">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <input
@@ -163,14 +171,6 @@ export default function HomePage() {
                 <option value="house">House</option>
                 <option value="flat">Flat</option>
               </select>
-            </div>
-          </div>
-
-          {/* Ads Section in the Middle of Components */}
-          <div className="max-w-4xl mx-auto mb-12">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <SidebarAdSlider id="homepage-ad-1" layout="inline" />
-              <SidebarAdSlider id="homepage-ad-2" layout="inline" />
             </div>
           </div>
 

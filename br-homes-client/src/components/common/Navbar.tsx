@@ -141,18 +141,106 @@ export default function Navbar() {
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="md:hidden bg-white border-t border-slate-100 animate-slide-in">
-          <div className="px-4 py-4 space-y-3">
-            {navLinks()}
-            {isAuthenticated && (
-              <div className="pt-3 mt-3 border-t border-slate-100">
-                <div className="flex items-center gap-2 mb-3 text-sm text-slate-600">
-                  <User className="w-4 h-4" />
-                  <span>{user?.name}</span>
-                  <span className="ml-auto text-xs bg-slate-100 px-2 py-0.5 rounded-full capitalize">{user?.role}</span>
+          <div className="px-4 py-4">
+            {!isAuthenticated ? (
+              <div className="flex flex-col gap-2">
+                <Link
+                  to="/properties"
+                  onClick={closeMobileMenu}
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all font-medium"
+                >
+                  <Building2 className="w-5 h-5 text-slate-500" />
+                  <span>Browse Properties</span>
+                </Link>
+                <Link
+                  to="/contact"
+                  onClick={closeMobileMenu}
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all font-medium"
+                >
+                  <Phone className="w-5 h-5 text-slate-500" />
+                  <span>Contact Us</span>
+                </Link>
+                <div className="h-px bg-slate-100 my-2" />
+                <div className="grid grid-cols-2 gap-3 pt-1">
+                  <Link to="/login" onClick={closeMobileMenu} className="w-full">
+                    <Button variant="outline" className="w-full justify-center">Login</Button>
+                  </Link>
+                  <Link to="/register" onClick={closeMobileMenu} className="w-full">
+                    <Button className="w-full justify-center">Register</Button>
+                  </Link>
                 </div>
-                <Button variant="outline" size="sm" onClick={handleLogout} className="w-full text-red-600 hover:text-red-700 hover:bg-red-50">
-                  <LogOut className="w-4 h-4 mr-2" /> Logout
-                </Button>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-2">
+                {user?.role === 'admin' && (
+                  <Link
+                    to="/admin/dashboard"
+                    onClick={closeMobileMenu}
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all font-medium"
+                  >
+                    <Shield className="w-5 h-5 text-slate-500" />
+                    <span>Admin Panel</span>
+                  </Link>
+                )}
+                {user?.role === 'owner' && (
+                  <Link
+                    to="/owner/dashboard"
+                    onClick={closeMobileMenu}
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all font-medium"
+                  >
+                    <LayoutDashboard className="w-5 h-5 text-slate-500" />
+                    <span>Owner Dashboard</span>
+                  </Link>
+                )}
+                <Link
+                  to="/properties"
+                  onClick={closeMobileMenu}
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all font-medium"
+                >
+                  <Building2 className="w-5 h-5 text-slate-500" />
+                  <span>Browse Properties</span>
+                </Link>
+                <Link
+                  to="/contact"
+                  onClick={closeMobileMenu}
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all font-medium"
+                >
+                  <Phone className="w-5 h-5 text-slate-500" />
+                  <span>Contact Us</span>
+                </Link>
+                <Link
+                  to="/saved"
+                  onClick={closeMobileMenu}
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all font-medium"
+                >
+                  <Heart className="w-5 h-5 text-slate-500" />
+                  <span>Saved Properties</span>
+                </Link>
+                
+                <div className="h-px bg-slate-100 my-2" />
+                
+                <div className="flex items-center gap-3 px-3 py-2">
+                  <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center flex-shrink-0">
+                    <User className="w-5 h-5 text-slate-600" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-slate-900 truncate">{user?.name}</p>
+                    <p className="text-xs text-slate-500 capitalize">{user?.role}</p>
+                  </div>
+                  <span className="text-xs bg-slate-100 text-slate-800 px-2 py-0.5 rounded-full font-medium capitalize border border-slate-200">
+                    {user?.role}
+                  </span>
+                </div>
+
+                <div className="pt-2">
+                  <Button
+                    variant="outline"
+                    onClick={handleLogout}
+                    className="w-full text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200 hover:border-red-300 justify-center gap-2"
+                  >
+                    <LogOut className="w-4 h-4" /> Logout
+                  </Button>
+                </div>
               </div>
             )}
           </div>
