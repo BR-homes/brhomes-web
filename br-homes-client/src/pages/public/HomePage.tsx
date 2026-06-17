@@ -20,6 +20,7 @@ export default function HomePage() {
   const categories = catData?.data || []
   const [index, setIndex] = useState(0)
   const [isHovered, setIsHovered] = useState(false)
+  const [showAllServices, setShowAllServices] = useState(false)
 
   useEffect(() => {
     if (sliderImages.length <= 1 || isHovered) return
@@ -54,7 +55,7 @@ export default function HomePage() {
             onMouseLeave={() => setIsHovered(false)}
           >
             {sliderImages.length > 0 ? (
-              <div className="relative h-64 sm:h-96 w-full overflow-hidden">
+              <div className="relative aspect-[16/9] md:aspect-[21/9] lg:aspect-auto lg:h-[400px] w-full overflow-hidden">
                 {sliderImages.map((img: any, i: number) => (
                   <img
                     key={img._id}
@@ -119,25 +120,53 @@ export default function HomePage() {
             </div>
             
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-              {categories.map((cat: any) => (
-                <Link
-                  key={cat._id}
-                  to={`/categories/${cat._id}`}
-                  className="group bg-white p-5 rounded-2xl border border-slate-200 hover:border-slate-950 hover:shadow-md transition-all duration-300 flex flex-col items-center justify-center text-center active:scale-95"
-                >
-                  <div className="w-16 h-16 rounded-xl overflow-hidden bg-slate-50 flex items-center justify-center mb-3 group-hover:scale-105 transition-transform duration-300 border border-slate-100">
-                    <img 
-                      src={cat.imageUrl} 
-                      alt={cat.title} 
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <span className="font-bold text-slate-700 text-sm group-hover:text-slate-950 leading-tight">
-                    {cat.title}
-                  </span>
-                </Link>
-              ))}
+              {categories.map((cat: any, i: number) => {
+                let hiddenClass = 'flex';
+                if (!showAllServices) {
+                  if (i >= 18) hiddenClass = 'hidden';
+                  else if (i >= 12) hiddenClass = 'hidden lg:flex';
+                  else if (i >= 9) hiddenClass = 'hidden md:flex';
+                  else if (i >= 6) hiddenClass = 'hidden sm:flex';
+                }
+
+                return (
+                  <Link
+                    key={cat._id}
+                    to={`/categories/${cat._id}`}
+                    className={`group bg-white p-5 rounded-2xl border border-slate-200 hover:border-slate-950 hover:shadow-md transition-all duration-300 flex-col items-center justify-center text-center active:scale-95 ${hiddenClass}`}
+                  >
+                    <div className="w-16 h-16 rounded-xl overflow-hidden bg-slate-50 flex items-center justify-center mb-3 group-hover:scale-105 transition-transform duration-300 border border-slate-100">
+                      <img 
+                        src={cat.imageUrl} 
+                        alt={cat.title} 
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <span className="font-bold text-slate-700 text-sm group-hover:text-slate-950 leading-tight">
+                      {cat.title}
+                    </span>
+                  </Link>
+                );
+              })}
             </div>
+
+            {/* Show More Button */}
+            {categories.length > 6 && (
+              <div className={`mt-6 text-center ${
+                showAllServices ? 'block' :
+                categories.length <= 9 ? 'block sm:hidden' :
+                categories.length <= 12 ? 'block md:hidden' :
+                categories.length <= 18 ? 'block lg:hidden' : 'block'
+              }`}>
+                <Button 
+                  variant="outline" 
+                  onClick={() => setShowAllServices(!showAllServices)}
+                  className="rounded-full px-6"
+                >
+                  {showAllServices ? 'Show Less' : 'Show More'}
+                </Button>
+              </div>
+            )}
           </div>
         </section>
       )}
