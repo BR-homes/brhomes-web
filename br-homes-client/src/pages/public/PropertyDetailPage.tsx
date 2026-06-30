@@ -46,7 +46,7 @@ export default function PropertyDetailPage() {
       document.title = `${property.title} | BR-Homes`
       const metaDescription = document.querySelector('meta[name="description"]')
       if (metaDescription) {
-        metaDescription.setAttribute('content', `${property.title} in ${property.address}. ${property.description.substring(0, 150)}...`)
+        metaDescription.setAttribute('content', `${property.title} in ${property.areaLocality}, ${property.city}. ${property.description.substring(0, 150)}...`)
       }
     }
     return () => {
