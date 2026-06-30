@@ -21,7 +21,47 @@ const app = express()
 app.use(helmet())
 app.use(
   cors({
-    origin: env.CLIENT_URL,
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps, curl, postman)
+      if (!origin) {
+        callback(null, true)
+        return
+      }
+
+      // Main allowed origins list (including the dynamically parsed CLIENT_URL)
+      const allowedOrigins = [
+        env.CLIENT_URL,
+        'https://www.brhome.in',
+        'https://brhome.in',
+        'https://brhomes-app-br-homes-client.vercel.app',
+        'http://localhost:5173',
+        'http://localhost:3000',
+      ].filter(Boolean)
+
+      // Check if origin matches any allowed origin exactly or after normalization
+      const isAllowed = allowedOrigins.some((allowed) => {
+        if (!allowed) return false
+        const normAllowed = allowed.replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/$/, '')
+        const normOrigin = origin.replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/$/, '')
+        return normAllowed === normOrigin
+      })
+
+      // Check if origin matches domains dynamically
+      const host = origin.replace(/^https?:\/\//, '').split(':')[0]
+      const isDomainMatch =
+        host === 'brhome.in' ||
+        host.endsWith('.brhome.in') ||
+        host === 'vercel.app' ||
+        host.endsWith('.vercel.app') ||
+        host === 'localhost' ||
+        host === '127.0.0.1'
+
+      if (isAllowed || isDomainMatch) {
+        callback(null, origin)
+      } else {
+        callback(null, false)
+      }
+    },
     credentials: true,
   })
 )

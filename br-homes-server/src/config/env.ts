@@ -3,7 +3,10 @@ import { z } from 'zod'
 const envSchema = z.object({
   PORT: z.string().default('5000'),
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
-  CLIENT_URL: z.string().default('http://localhost:5173'),
+  CLIENT_URL: z.string().default('http://localhost:5173').transform((val) => {
+    if (!val) return val
+    return val.startsWith('http') ? val : `https://${val}`
+  }),
   MONGODB_URI: z.string().default('mongodb://localhost:27017/br-homes'),
   JWT_SECRET: z.string().min(32).default('dev-secret-change-me-in-production-32chars!!'),
   GOOGLE_CLIENT_ID: z.string().default('placeholder-google-client-id'),
