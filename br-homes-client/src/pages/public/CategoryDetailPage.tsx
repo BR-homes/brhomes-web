@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useCategories } from '@/hooks/useCategories'
 import { useServices } from '@/hooks/useServices'
@@ -17,6 +18,23 @@ export default function CategoryDetailPage() {
   const services = servData?.data || []
 
   const isLoading = isLoadingCats || isLoadingServs
+
+  useEffect(() => {
+    if (currentCategory) {
+      document.title = `${currentCategory.title} Services | BR-Homes`
+      const metaDescription = document.querySelector('meta[name="description"]')
+      if (metaDescription) {
+        metaDescription.setAttribute('content', `Professional in-house ${currentCategory.title} services in Amreli. Find reliable local service providers with zero commission.`)
+      }
+    }
+    return () => {
+      document.title = 'BR-Homes | No-Broker Property in Amreli'
+      const metaDescription = document.querySelector('meta[name="description"]')
+      if (metaDescription) {
+        metaDescription.setAttribute('content', 'BR-Homes - No-broker real estate marketplace for Amreli, Gujarat. Browse houses and flats directly from owners. Zero commission.')
+      }
+    }
+  }, [currentCategory])
 
   if (isLoading) {
     return (

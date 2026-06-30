@@ -41,6 +41,23 @@ export default function PropertyDetailPage() {
     return () => clearInterval(interval)
   }, [images.length, isHovered])
 
+  useEffect(() => {
+    if (property) {
+      document.title = `${property.title} | BR-Homes`
+      const metaDescription = document.querySelector('meta[name="description"]')
+      if (metaDescription) {
+        metaDescription.setAttribute('content', `${property.title} in ${property.address}. ${property.description.substring(0, 150)}...`)
+      }
+    }
+    return () => {
+      document.title = 'BR-Homes | No-Broker Property in Amreli'
+      const metaDescription = document.querySelector('meta[name="description"]')
+      if (metaDescription) {
+        metaDescription.setAttribute('content', 'BR-Homes - No-broker real estate marketplace for Amreli, Gujarat. Browse houses and flats directly from owners. Zero commission.')
+      }
+    }
+  }, [property])
+
   if (isLoading) return <LoadingSkeleton type="detail" />
 
   if (isError || !data?.data || !property) {

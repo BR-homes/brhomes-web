@@ -1,0 +1,17 @@
+# https://www.robotstxt.org/robotstxt.html
+# Allow all search engines to crawl public pages, but disallow private/auth paths
+
+User-agent: *
+Allow: /
+
+# Disallow private and authenticated paths
+Disallow: /admin/
+Disallow: /owner/
+Disallow: /saved/
+Disallow: /login
+Disallow: /register
+Disallow: /verify-email
+Disallow: /complete-profile
+
+# Sitemap URL (Replace with your actual domain if different)
+Sitemap: https://brhomes.app/sitemap.xml
