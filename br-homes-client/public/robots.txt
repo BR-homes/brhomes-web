@@ -13,5 +13,5 @@ Disallow: /register
 Disallow: /verify-email
 Disallow: /complete-profile
 
-# Sitemap URL (Replace with your actual domain if different)
-Sitemap: https://brhomes.app/sitemap.xml
+# Sitemap URL
+Sitemap: https://www.brhome.in/sitemap.xml
